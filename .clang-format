@@ -1,0 +1,15 @@
+﻿---
+BasedOnStyle: LLVM
+AccessModifierOffset: '-4'
+AlignConsecutiveMacros: 'true'
+AlwaysBreakAfterReturnType: None
+AlwaysBreakTemplateDeclarations: 'Yes'
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: 'true'
+ColumnLimit: '130'
+IndentCaseLabels: 'true'
+IndentWidth: '4'
+TabWidth: '4'
+UseTab: Never
+
+...
