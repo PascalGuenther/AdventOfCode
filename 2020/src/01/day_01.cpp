@@ -36,15 +36,46 @@ std::optional<std::pair<num_t, num_t>> FindExpenseReportEntries(const num_t (&aU
 
 int main()
 {
+    std::cout << "==Day 01==\n";
+
     constexpr num_t expectedSum = 2020u;
     constexpr num_t aUnsortedInput[] = {AOC_INPUT_2020_01_A};
-    auto entryPair = FindExpenseReportEntries(aUnsortedInput, expectedSum);
-    if (!entryPair.has_value())
     {
-        std::cout << "No entry pair found\n";
+        std::cout << "=Part 1=\n";
+        auto entryPair = FindExpenseReportEntries(aUnsortedInput, expectedSum);
+        if (!entryPair.has_value())
+        {
+            std::cout << "No entry pair found\n";
+            return 1;
+        }
+        std::cout << "Sum of entries [" << entryPair.value().first << ", " << entryPair.value().second << "] is " << expectedSum
+                  << "\n";
+        std::cout << "Product of these entries: " << entryPair.value().first * entryPair.value().second << "\n";
+    }
+    {
+        std::cout << "=Part 2=\n";
+        for (const auto entry : aUnsortedInput)
+        {
+            if (entry > expectedSum)
+            {
+                continue;
+            }
+            const num_t expectedSumFurtherEntries = expectedSum - entry;
+            const auto furtherEntries = FindExpenseReportEntries(aUnsortedInput, expectedSumFurtherEntries);
+            if (!furtherEntries.has_value())
+            {
+                continue;
+            }
+            if ((entry == furtherEntries.value().first) || (entry == furtherEntries.value().second))
+            {
+                continue;
+            }
+            std::cout << "Sum of entries [" << entry << ", " << furtherEntries.value().first << ", "
+                      << furtherEntries.value().second << "] is " << expectedSum << "\n";
+            std::cout << "Product of these entries: " << entry * furtherEntries.value().first * furtherEntries.value().second
+                      << "\n";
+            return 0;
+        }
         return 1;
     }
-    std::cout << "Found entries: [" << entryPair.value().first << ", " << entryPair.value().second << "]\n";
-    std::cout << "Product of these entries: " << entryPair.value().first * entryPair.value().second << "\n";
-    return 0;
 }
