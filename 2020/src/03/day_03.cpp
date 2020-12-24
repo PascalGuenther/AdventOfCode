@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <optional>
 #include <string>
 #include <vector>
@@ -119,6 +120,25 @@ private:
     size_t m_width{};
 };
 
+[[nodiscard]] size_t CountTreesOnRoute(const Terrain &areaMap, const size_t rightIncrement, const size_t downIncrement)
+{
+    size_t xPos = 0u;
+    size_t yPos = 0u;
+    size_t treeCount = 0u;
+    const auto yMax = areaMap.GetHeight();
+    while (yPos < yMax)
+    {
+        if (MapItem::Tree == areaMap.GetItem(xPos, yPos))
+        {
+            treeCount++;
+        }
+        xPos += rightIncrement;
+        yPos += downIncrement;
+    }
+    std::cout << treeCount << std::endl;
+    return treeCount;
+}
+
 int main(int argc, const char *argv[])
 {
     std::cout << "==Day 03==\n";
@@ -132,20 +152,21 @@ int main(int argc, const char *argv[])
         const Terrain areaMap = Terrain(argv[1u]);
         {
             std::cout << "=Part 1=\n";
-            size_t xPos = 0u;
-            size_t yPos = 0u;
-            size_t treeCount = 0u;
-            const auto yMax = areaMap.GetHeight();
-            while (yPos < yMax)
-            {
-                if (MapItem::Tree == areaMap.GetItem(xPos, yPos))
-                {
-                    treeCount++;
-                }
-                xPos += 3u;
-                yPos += 1u;
-            }
+            const size_t rightIncrement = 3u;
+            const size_t downIncrement = 1u;
+            const auto treeCount = CountTreesOnRoute(areaMap, rightIncrement, downIncrement);
             std::cout << "We have encountered " << treeCount << " trees.\n";
+        }
+        {
+            std::cout << "=Part 2=\n";
+            std::pair<size_t, size_t> aSlopes[] = {
+                {1u, 1u}, {3u, 1u}, {5u, 1u}, {7u, 1u}, {1u, 2u},
+            };
+            uint64_t treeProduct = std::accumulate(std::begin(aSlopes), std::end(aSlopes), 1ull,
+                                                   [&areaMap](uint64_t accumulator, const auto &slope) {
+                                                       return accumulator * CountTreesOnRoute(areaMap, slope.first, slope.second);
+                                                   });
+            std::cout << "Product of number of trees on all slopes: " << treeProduct << "\n";
         }
     }
     catch (std::exception & /*e*/)
