@@ -76,6 +76,8 @@ private:
             assignedSeats.emplace_back(line);
         }
     }
+    std::sort(assignedSeats.begin(), assignedSeats.end(),
+              [](const auto &lhs, const auto &rhs) { return (lhs.GetId() < rhs.GetId()); });
     if (assignedSeats.size() < 1u)
     {
         std::cout << "No seats assigned";
@@ -86,6 +88,18 @@ private:
         const auto it = std::max_element(assignedSeats.begin(), assignedSeats.end(),
                                          [](const auto &lhs, const auto &rhs) { return (lhs.GetId() < rhs.GetId()); });
         std::cout << "Highest seat ID: " << it->GetId() << "\n";
+    }
+    {
+        std::cout << "=Part 2=\n";
+        const auto beforeOurs =
+            std::adjacent_find(assignedSeats.begin(), assignedSeats.end(),
+                               [](const auto &current, const auto &next) { return ((current.GetId() + 2) == next.GetId()); });
+        if (beforeOurs == assignedSeats.end())
+        {
+            return 1;
+        }
+        const Seat::seatId_t ourSeatId = beforeOurs->GetId() + 1;
+        std::cout << "Our seat ID: " << ourSeatId << "\n";
     }
     return 0;
 }
