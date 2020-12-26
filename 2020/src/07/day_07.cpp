@@ -80,7 +80,7 @@ public:
         return;
     }
 
-    [[nodiscard]] size_t ContainedQuantityOfColor(const std::vector<Bag> &others, std::string_view color,
+    [[nodiscard]] size_t ContainedQuantityOfColor(const std::vector<Bag> &others, const std::string_view &color,
                                                   size_t recursionDepth = 0u) const
     {
         if (recursionDepth > maxRecursionDepth)
@@ -99,14 +99,41 @@ public:
             [&others, &color, recursionDepth](auto acc, const auto &containedBag) {
                 const auto &color_ = containedBag.first;
                 const auto &quantity = containedBag.second;
-                const auto it = std::find_if(others.begin(), others.end(), [recursionDepth, &color_, &others](const auto &other) {
-                    return (other.m_color == color_);
+                const auto it = std::find_if(others.begin(), others.end(), [&color_](const auto &other) {
+                    return other.DoesMatchColor(color_);
                 });
                 if (it == others.end())
                 {
                     throw std::runtime_error("Bag not found");
                 }
                 acc += quantity * it->ContainedQuantityOfColor(others, color, recursionDepth + 1u);
+                return acc;
+            });
+        return containedRecursively;
+    }
+
+    [[nodiscard]] bool DoesMatchColor(const std::string_view &color) const { return (m_color == color); }
+
+    [[nodiscard]] size_t CountNestedBags(const std::vector<Bag> &others, size_t recursionDepth = 0u) const
+    {
+        if (recursionDepth > maxRecursionDepth)
+        {
+            throw std::runtime_error("Too many recursions");
+        }
+        const size_t initalAcc{0u};
+        const size_t containedRecursively = std::accumulate(
+            m_containedBags.begin(), m_containedBags.end(), initalAcc,
+            [&others, recursionDepth](auto acc, const auto &containedBag) {
+                const auto &color_ = containedBag.first;
+                const auto &quantity = containedBag.second;
+                const auto it = std::find_if(others.begin(), others.end(), [&color_](const auto &other) {
+                    return other.DoesMatchColor(color_);
+                });
+                if (it == others.end())
+                {
+                    throw std::runtime_error("Bag not found");
+                }
+                acc += quantity * (1 + it->CountNestedBags(others, recursionDepth + 1u));
                 return acc;
             });
         return containedRecursively;
@@ -199,17 +226,45 @@ int main(const int argc, const char *const argv[])
             return ret;
         }
     }
+    constexpr std::string_view colorOfInterterst = "shiny gold";
+    int ret = 0u;
     std::cout << "Input parsing complete" << std::endl;
     {
         std::cout << "=Part 1=\n";
-        constexpr const char colorOfInterterst[] = "shiny gold";
-        const auto canAtLeastHoldOneBagOfColor = std::count_if(
-            bagsWithRules.begin(), bagsWithRules.end(), [&colorOfInterterst, &bagsWithRules](const auto &bag) -> bool {
-                return (bag.ContainedQuantityOfColor(bagsWithRules, colorOfInterterst) >= 1u);
-            });
-        std::cout << "Number of bags which can eventually contain at least one " << colorOfInterterst
-                  << " bag: " << canAtLeastHoldOneBagOfColor << "\n";
+        try
+        {
+            const auto canAtLeastHoldOneBagOfColor = std::count_if(
+                bagsWithRules.begin(), bagsWithRules.end(), [&colorOfInterterst, &bagsWithRules](const auto &bag) -> bool {
+                    return (bag.ContainedQuantityOfColor(bagsWithRules, colorOfInterterst) >= 1u);
+                });
+            std::cout << "Number of bags which can eventually contain at least one " << colorOfInterterst
+                      << " bag: " << canAtLeastHoldOneBagOfColor << "\n";
+        }
+        catch (...)
+        {
+            std::cerr << "Calculation of part 1 failed";
+            ret = 1;
+        }
+    }
+    {
+        std::cout << "=Part 2=\n";
+        try
+        {
+            const auto it = std::find_if(bagsWithRules.begin(), bagsWithRules.end(),
+                                         [&colorOfInterterst](const auto &bag) { return bag.DoesMatchColor(colorOfInterterst); });
+            if (it == bagsWithRules.end())
+            {
+                throw;
+            }
+            const auto containedIndividualBags = it->CountNestedBags(bagsWithRules);
+            std::cout << "The " << colorOfInterterst << " bag contains " << containedIndividualBags << " individual bags.\n";
+        }
+        catch (...)
+        {
+            std::cerr << "Calculation of part 2 failed";
+            ret = 1;
+        }
     }
 
-    return 0;
+    return ret;
 }
