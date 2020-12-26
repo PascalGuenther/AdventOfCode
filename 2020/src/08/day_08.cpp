@@ -26,16 +26,16 @@ enum class Opcode
 struct Instruction
 {
     Instruction(Opcode opcode, int argument) : opcode(opcode), argument(argument) {}
-    const Opcode opcode;
+    Opcode opcode;
     const int argument;
 };
 
 using Program_t = std::vector<Instruction>;
 
-int ExecuteProgram(const Program_t &prog)
+bool ExecuteProgram(const Program_t &prog, int &accumulator)
 {
     std::set<size_t> executedInstructions;
-    int accumulator{0};
+    accumulator = 0;
     size_t programCounter{0};
     do
     {
@@ -45,7 +45,7 @@ int ExecuteProgram(const Program_t &prog)
             if (!(executedInstructions.insert(programCounter).second))
             {
                 // the instruction at this program counter has been executed before
-                return accumulator;
+                return false;
             }
 
             switch (instruction.opcode)
@@ -76,12 +76,15 @@ int ExecuteProgram(const Program_t &prog)
         }
         catch (const std::out_of_range & /* e */)
         {
+            if (programCounter == prog.size())
+            {
+                // program terminates gracefully by fetching the instruction below the last instruction
+                return true;
+            }
             throw std::out_of_range("Program counter exceeds code area");
         }
 
     } while (true);
-
-    return accumulator;
 }
 
 [[nodiscard]] Instruction ParseInstruction(const std::string &instruction)
@@ -127,39 +130,93 @@ int ExecuteProgram(const Program_t &prog)
 
 int main(const int argc, const char *const argv[])
 {
-    std::cout << "==Day 07==\n";
+    std::cout << "==Day 08==\n";
 #if !defined(NDEBUG)
     std::cout << "Debug build\n";
 #endif
     int ret = 0;
     try
     {
-        const Program_t program = [&argc, &argv]() {
-            if (argc < 2)
+        Program_t program;
+        if (argc < 2)
+        {
+            std::cout << "Using example input. Alternatively, you can pass the path to an input file as command line argument\n";
+            program.reserve(sizeof(aExampleInput) / sizeof(*aExampleInput));
+            for (const auto &line : aExampleInput)
             {
-                std::cout
-                    << "Using example input. Alternatively, you can pass the path to an input file as command line argument\n";
-                Program_t program;
-                program.reserve(sizeof(aExampleInput) / sizeof(*aExampleInput));
-                for (const auto &line : aExampleInput)
-                {
-                    program.push_back(ParseInstruction(line));
-                }
-                return program;
+                program.push_back(ParseInstruction(line));
             }
-            else
-            {
-                return LoadProgramFile(argv[1u]);
-            }
-        }();
+        }
+        else
+        {
+            program = LoadProgramFile(argv[1u]);
+        }
+
         std::cout << "Input parsing complete" << std::endl;
         {
             std::cout << "=Part 1=\n";
             try
             {
-                const auto accumulated = ExecuteProgram(program);
-                std::cout << "Immediately before any instruction is executed a second time, the value in the accumulator is "
-                          << accumulated << ".\n";
+                int accumulator{0};
+                if (!ExecuteProgram(program, accumulator))
+                {
+
+                    std::cout << "Immediately before any instruction is executed a second time, the value in the accumulator is "
+                              << accumulator << ".\n";
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            catch (std::runtime_error &e)
+            {
+                std::cerr << e.what();
+                ret = 1;
+            }
+            catch (std::out_of_range &e)
+            {
+                std::cerr << e.what();
+                ret = 1;
+            }
+        }
+        {
+            std::cout << "=Part 2=\n";
+            try
+            {
+                bool programHasBeenFixed = false;
+                for (auto &instruction : program)
+                {
+                    const Opcode originalOpcode = instruction.opcode;
+                    switch (instruction.opcode)
+                    {
+                        case Opcode::nop:
+                            instruction.opcode = Opcode::jmp;
+                            break;
+                        case Opcode::jmp:
+                            instruction.opcode = Opcode::nop;
+                            break;
+                        default:
+                            continue;
+                    }
+                    int accumulator{0};
+                    if (!ExecuteProgram(program, accumulator))
+                    {
+                        // fix has not worked, revert...
+                        instruction.opcode = originalOpcode;
+                    }
+                    else
+                    {
+                        std::cout << "After the program terminates, the value in the accumulator is " << accumulator << ".\n";
+                        programHasBeenFixed = true;
+                        break;
+                    }
+                }
+                if (!programHasBeenFixed)
+                {
+                    std::cerr << "Failed to fix the program\n";
+                    ret = 1;
+                }
             }
             catch (std::runtime_error &e)
             {
