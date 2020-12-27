@@ -19,7 +19,7 @@ public:
     _X_(pid)                                                                                                                     \
     _X_(cid)
 
-    enum Field
+    enum Field : size_t
     {
 #define AOC_PASSPORT_FIELD_ENUM_ENTRY(entry) entry,
         AOC_PASSPORT_FIELD_LIST(AOC_PASSPORT_FIELD_ENUM_ENTRY) Max,
