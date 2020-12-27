@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <numeric>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -17,9 +18,7 @@
 namespace
 {
 
-using std::size_t;
 using Joltage = std::uint32_t;
-
 constexpr Joltage outletJoltage{0u};
 constexpr Joltage maxJoltageStep{3u};
 
@@ -44,6 +43,28 @@ int Day010_Part1(const std::set<Joltage> &input)
 
     std::cout << "1-jolt steps: " << joltageSteps[1u] << ", 3-jolt steps: " << joltageSteps[3u] << "\n";
     std::cout << "Product of 1-jolt and 3-jolt steps: " << joltageSteps[1u] * joltageSteps[3u] << "\n";
+    return 0;
+}
+
+int Day010_Part2(const std::set<Joltage> &input)
+{
+    std::cout << "=Part 2=\n";
+    std::array<std::uint64_t, maxJoltageStep> arrangements = {1u};
+    constexpr std::decay<decltype(arrangements[0u])>::type initalAccumulator{0u};
+    const auto lastAdapterJoltage = *input.rbegin();
+    for (Joltage adapter = 1; adapter < lastAdapterJoltage; adapter++)
+    {
+        auto it = input.find(adapter);
+        const auto position = adapter % arrangements.size();
+        if (input.end() == it)
+        {
+            arrangements[position] = 0u;
+            continue;
+        }
+        arrangements[position] = std::accumulate(arrangements.begin(), arrangements.end(), initalAccumulator);
+    }
+    const auto totalArrangements = std::accumulate(arrangements.begin(), arrangements.end(), initalAccumulator);
+    std::cout << "Total number of distinct ways we can arrange the adapters: " << totalArrangements << "\n";
     return 0;
 }
 
@@ -77,5 +98,9 @@ int main(const int argc, const char *const argv[])
     }
 
     int ret = Day010_Part1(sortedInput);
+    if (ret == 0)
+    {
+        ret = Day010_Part2(sortedInput);
+    }
     return ret;
 }
