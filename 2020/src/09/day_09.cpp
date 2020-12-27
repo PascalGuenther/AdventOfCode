@@ -76,7 +76,7 @@ struct XMAS
     }
 }
 
-int Day09_Part1(const XMAS &input)
+size_t Day09_Part1(const XMAS &input)
 {
     std::cout << "=Part 1=\n";
     const auto invalidNumIndex = FindIndexOfFirstInvalidNumber(input);
@@ -84,10 +84,43 @@ int Day09_Part1(const XMAS &input)
     if (!invalidNumIndex.has_value() || (idx >= input.sequence.size()))
     {
         std::cerr << "Failed to find an invalid number\n";
-        return 2;
+        return 0;
     }
     std::cout << "Found first invalid number at index [" << idx << "]: " << input.sequence[idx] << "\n";
-    return 0;
+    return idx;
+}
+
+int Day09_Part2(const XMAS &input, const size_t indexOfInvalidNum)
+{
+    std::cout << "=Part 2=\n";
+    const auto &seq = input.sequence;
+    const auto itEnd = seq.begin() + indexOfInvalidNum;
+    const auto invalidNum{*itEnd};
+    for (auto it1 = seq.begin(); it1 < itEnd; it1++)
+    {
+        XMAS::num_t sum{*it1};
+        for (auto it2 = it1 + 1; it2 < itEnd; it2++)
+        {
+            sum += *it2;
+            if (sum >= invalidNum)
+            {
+                if (sum == invalidNum)
+                {
+                    const auto rangStartIndex = std::distance(seq.begin(), it1);
+                    const auto rangeEndIndex = std::distance(seq.begin(), it2);
+                    std::cout << "Contiguous range from [" << rangStartIndex << "] = " << *it1 << " to [" << rangeEndIndex
+                              << "] = " << *it2 << "\n";
+                    const auto rangeMin = *std::min_element(it1, it2 + 1);
+                    const auto rangeMax = *std::max_element(it1, it2 + 1);
+                    std::cout << "Min element in that range is " << rangeMin << ", max element in that range is " << rangeMax
+                              << "\n";
+                    std::cout << "Encryption weakness: " << rangeMin + rangeMax << "\n";
+                }
+                break;
+            }
+        }
+    }
+    return 1;
 }
 
 [[nodiscard]] XMAS LoadDataFromFile(const char *const filename)
@@ -144,7 +177,12 @@ int main(const int argc, const char *const argv[])
                 return LoadDataFromFile(argv[1u]);
             }
         }();
-        ret = Day09_Part1(input);
+        const auto invalidIdx = Day09_Part1(input);
+        if (0 == invalidIdx)
+        {
+            return 1;
+        }
+        ret = Day09_Part2(input, invalidIdx);
     }
     catch (std::runtime_error &e)
     {
