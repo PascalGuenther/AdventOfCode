@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -31,12 +32,12 @@ enum class Direction
 
 struct Position2D
 {
-    int x{0};
-    int y{0};
+    int east{0};
+    int north{0};
 
     [[nodiscard]] int ManhattanDistanceTo(const Position2D &other) const
     {
-        return (std::abs(this->x - other.x) + std::abs(this->y - other.y));
+        return (std::abs(this->east - other.east) + std::abs(this->north - other.north));
     }
 };
 
@@ -67,7 +68,11 @@ public:
 
 public:
     explicit Ship(const Direction orientation, const Position2D position = {0, 0})
-        : m_orientation(orientation), m_position(position)
+        : m_orientation(orientation), m_position(position), m_waypointNavigation(false), m_waypoint{0, 0}
+    {
+    }
+    explicit Ship(const Position2D position, const Position2D waypoint)
+        : m_orientation(Direction::Max), m_position(position), m_waypointNavigation(true), m_waypoint(waypoint)
     {
     }
 
@@ -105,8 +110,8 @@ public:
         {
             case ActionType::move:
             {
-                int factorX{0};
-                int factorY{0};
+                int factorEast{0};
+                int factorNorth{0};
                 Direction direction;
                 switch (action)
                 {
@@ -127,28 +132,43 @@ public:
                 switch (direction)
                 {
                     case Direction::North:
-                        factorX = 0;
-                        factorY = -1;
+                        factorEast = 0;
+                        factorNorth = 1;
                         break;
                     case Direction::East:
-                        factorX = 1;
-                        factorY = 0;
+                        factorEast = 1;
+                        factorNorth = 0;
                         break;
                     case Direction::South:
-                        factorX = 0;
-                        factorY = 1;
+                        factorEast = 0;
+                        factorNorth = -1;
                         break;
                     case Direction::West:
-                        factorX = -1;
-                        factorY = 0;
+                        factorEast = -1;
+                        factorNorth = 0;
                         break;
+                    case Direction::Max:
+                        if (m_waypointNavigation)
+                        {
+                            break;
+                        }
+                        [[fallthrough]];
                     default:
                         assert(false);
                         return false;
                 }
-                assert((factorX != 0) || (factorY != 0));
-                m_position.x += factorX * value;
-                m_position.y += factorY * value;
+                if (m_waypointNavigation && (action == Action::moveForward))
+                {
+                    m_position.east += value * m_waypoint.east;
+                    m_position.north += value * m_waypoint.north;
+                }
+                else
+                {
+                    assert((factorEast != 0) || (factorNorth != 0));
+                    auto &pointToMove = m_waypointNavigation ? m_waypoint : m_position;
+                    pointToMove.east += factorEast * value;
+                    pointToMove.north += factorNorth * value;
+                }
                 return true;
             }
 
@@ -166,15 +186,55 @@ public:
                     return false;
                 }
                 static_assert(static_cast<int>(Direction::Max) == 4, "");
-                const auto ninetyDegreeTurns = ((absValue / 90) % 4) * (turnRight ? 1 : -1);
-                const int newOrientation =
-                    (static_cast<int>(m_orientation) + ninetyDegreeTurns + 4) % static_cast<int>(Direction::Max);
-                if ((newOrientation < 0) || (newOrientation > static_cast<int>(Direction::Max)))
+                constexpr int dirCnt{static_cast<int>(Direction::Max)};
+                const auto ninetyDegreeTurns = (dirCnt + (((absValue / 90) % dirCnt) * (turnRight ? 1 : -1))) % dirCnt;
+                assert((ninetyDegreeTurns > 0) && (ninetyDegreeTurns < dirCnt));
+                if (!m_waypointNavigation)
                 {
-                    return false;
+                    const int newOrientation = (static_cast<int>(m_orientation) + ninetyDegreeTurns) % dirCnt;
+                    if ((newOrientation < 0) || (newOrientation > dirCnt))
+                    {
+                        return false;
+                    }
+                    m_orientation = static_cast<Direction>(newOrientation);
+                    return true;
                 }
-                m_orientation = static_cast<Direction>(newOrientation);
-                return true;
+                else
+                {
+                    switch (ninetyDegreeTurns)
+                    {
+                        case 0:
+                        {
+                            return true;
+                        }
+
+                        case 1:
+                        {
+                            const auto prevEast = m_waypoint.east;
+                            m_waypoint.east = m_waypoint.north;
+                            m_waypoint.north = -prevEast;
+                            return true;
+                        }
+
+                        case 2:
+                        {
+                            m_waypoint.east = -m_waypoint.east;
+                            m_waypoint.north = -m_waypoint.north;
+                            return true;
+                        }
+
+                        case 3:
+                        {
+                            const auto prevNorth = m_waypoint.north;
+                            m_waypoint.north = m_waypoint.east;
+                            m_waypoint.east = -prevNorth;
+                            return true;
+                        }
+
+                        default:
+                            return false;
+                    }
+                }
             }
 
             default:
@@ -237,7 +297,9 @@ public:
 
 private:
     Direction m_orientation;
-    Position2D m_position{0, 0};
+    Position2D m_position;
+    const bool m_waypointNavigation;
+    Position2D m_waypoint;
 };
 
 int Day12_Part1(const std::vector<std::string> &input)
@@ -245,6 +307,30 @@ int Day12_Part1(const std::vector<std::string> &input)
     std::cout << "=Part 1=\n";
     constexpr Position2D startPos{0, 0};
     Ship ship(Direction::East, startPos);
+    for (const auto &instruction : input)
+    {
+        if (!ship.Navigate(instruction))
+        {
+            std::cerr << "Failed to parse navigation instruction";
+#if !defined(NDEBUG)
+            std::cerr << ": " << instruction;
+#endif
+            std::cerr << "\n";
+            return 1;
+        }
+    }
+    std::cout << "Manhattan distance to the start postion: " << ship.GetPositon().ManhattanDistanceTo(startPos) << "\n";
+    return 0;
+}
+
+int Day12_Part2(const std::vector<std::string> &input)
+{
+    std::cout << "=Part 2=\n";
+    constexpr Position2D startPos{0, 0};
+    constexpr int waypointInitalOffsetEast{10};
+    constexpr int waypointInitalOffsetNorth{1};
+    constexpr Position2D firstWaypoint{startPos.east + waypointInitalOffsetEast, startPos.north + waypointInitalOffsetNorth};
+    Ship ship(startPos, firstWaypoint);
     for (const auto &instruction : input)
     {
         if (!ship.Navigate(instruction))
@@ -302,7 +388,7 @@ int main(const int argc, const char *const argv[])
         int ret = Day12_Part1(rawInput);
         if (ret == 0)
         {
-            // ret = Day12_Part2(input);
+            ret = Day12_Part2(rawInput);
         }
         return ret;
     }
