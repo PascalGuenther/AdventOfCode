@@ -13,7 +13,6 @@
 #include <variant>
 #include <vector>
 
-
 #include "fileUtils.hpp"
 
 namespace
@@ -42,6 +41,10 @@ public:
         int earliestBus{};
         for (const auto bus : m_busIds)
         {
+            if (bus <= 0)
+            {
+                continue;
+            }
             const auto loopIteration = (time / bus) + 1;
             const auto departure = loopIteration * bus;
             if (departure < earliestDeparture)
@@ -58,6 +61,39 @@ public:
         return {earliestBus, earliestDeparture - time};
     }
 
+    [[nodiscard]] std::uint64_t FindEarliestSubsequentDepartures()
+    {
+        const auto numOfBuses = m_busIds.size();
+        std::uint64_t offset = m_busIds[0u];
+        size_t index{1u};
+        for (std::uint64_t timestamp = offset;; timestamp += offset)
+        {
+            do
+            {
+                if (m_busIds[index] <= 0)
+                {
+                    index++;
+                    continue;
+                }
+
+                if (0u == ((timestamp + index) % m_busIds[index]))
+                {
+                    offset *= m_busIds[index];
+                    index++;
+                }
+                else
+                {
+
+                    break;
+                }
+            } while (index < numOfBuses);
+            if (index == numOfBuses)
+            {
+                return timestamp;
+            }
+        }
+    }
+
 private:
     [[nodiscard]] static std::vector<int> ParseBusIds(const std::string &busIds)
     {
@@ -70,6 +106,10 @@ private:
             if (busIds[pos1] != 'x')
             {
                 parsedBusIds.push_back(std::stoi(busIds.substr(pos1, pos2)));
+            }
+            else
+            {
+                parsedBusIds.push_back(0);
             }
             pos1 = pos2 + 1;
         } while ((pos2 != std::string::npos && (pos1 < busIds.size())));
@@ -91,7 +131,8 @@ int Day13_Part1(const std::array<std::string, 2u> &input)
         std::cerr << "Failed to find earliest departure\n";
         return 1;
     }
-    std::cout << "Bus " << nextDeparture.busId << " departs in " << nextDeparture.waitTime << " minutes.\n";
+    std::cout << "Bus " << nextDeparture.busId << " departs in " << nextDeparture.waitTime << " minute"
+              << ((nextDeparture.waitTime == 1) ? ".\n" : "s.\n");
     std::cout << "Product: " << nextDeparture.waitTime * nextDeparture.busId << "\n";
     return 0;
 }
@@ -99,7 +140,14 @@ int Day13_Part1(const std::array<std::string, 2u> &input)
 int Day13_Part2(const std::array<std::string, 2u> &input)
 {
     std::cout << "=Part 2=\n";
-    std::cout << "To be implemented...\n";
+    BusSchedule schedule{input[1u]};
+    const auto earliestSubsequentDepartures = schedule.FindEarliestSubsequentDepartures();
+    if (0 == earliestSubsequentDepartures)
+    {
+        std::cerr << "Could not find a timestamp such that all buses depart at subsequent minutes.\n";
+    }
+    std::cout << "Earliest timestaps such that all buses depart at an offset matching their positions: "
+              << earliestSubsequentDepartures << "\n";
     static_cast<void>(input);
     return 0;
 }
