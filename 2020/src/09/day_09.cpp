@@ -144,7 +144,7 @@ int Day09_Part2(const XMAS &input, const size_t indexOfInvalidNum)
         }
         const auto parsedValue = std::stoull(line);
         sequence.push_back(parsedValue);
-        static_assert(std::is_same_v<std::decay_t<decltype(*sequence.begin())>, std::decay_t<decltype(parsedValue)>>, "");
+        static_assert(std::numeric_limits<decltype(sequence)::value_type>::max() >= std::numeric_limits<decltype(parsedValue)>::max(), "");
     }
     return {25, sequence};
 }

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -109,10 +110,21 @@ int Day15_Part1(const std::string_view &input)
     return 0;
 }
 
-int Day15_Part2(const std::string_view & /*input*/)
+int Day15_Part2(const std::string_view &input)
 {
     std::cout << "=Part 2=\n";
-    std::cout << "Sum of all values left in memory: To be implemented...\n";
+    MemoryGame game{input};
+    while (true)
+    {
+        const auto [turn, spokenNumber] = game.SpeakNumber();
+        constexpr unsigned int turnOfInterest{30'000'000};
+        if (turn == turnOfInterest)
+        {
+            std::cout << "Number spoken in turn #" << turn << ": " << spokenNumber << "\n";
+            return 0;
+        }
+    }
+
     return 0;
 }
 
