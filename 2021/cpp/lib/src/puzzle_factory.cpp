@@ -1,7 +1,9 @@
 #include "puzzle_factory.hpp"
 #include "puzzle_common.hpp"
 
-#define AOC_Y2021_SUPPORTED_PUZZLES_LIST(X_) X_(01)
+#define AOC_Y2021_SUPPORTED_PUZZLES_LIST(X_)                                                                           \
+    X_(01)                                                                                                             \
+    X_(02)
 
 namespace AOC::Y2021
 {

@@ -37,7 +37,7 @@ template <typename T> std::vector<T> ParseLineByLineX(const std::string_view &st
 
 } // namespace
 
-std::vector<int> ParseLineByLineInt(const std::string_view &str)
+std::vector<int> ParseLineByLineInt(const std::string_view str)
 {
     return ParseLineByLineX<int>(str);
 }

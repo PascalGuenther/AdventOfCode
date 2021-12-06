@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 add_library(AOC_Y2021 STATIC
     src/day01.cpp
+    src/day02.cpp
     src/puzzle_factory.cpp
     src/utils.cpp
 )
