@@ -3,7 +3,8 @@
 
 #define AOC_Y2021_SUPPORTED_PUZZLES_LIST(X_)                                                                           \
     X_(01)                                                                                                             \
-    X_(02)
+    X_(02)                                                                                                             \
+    X_(03)
 
 namespace AOC::Y2021
 {

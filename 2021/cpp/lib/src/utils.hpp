@@ -3,17 +3,19 @@
 
 #include "../inc/types.hpp"
 
+#include <cstdint>
 #include <string_view>
+#include <type_traits>
 #include <vector>
 
 namespace AOC::Y2021
 {
 std::vector<int> ParseLineByLineInt(std::string_view str);
 
-template <typename T> constexpr T ParseNumber(std::string_view str)
+template <typename T> constexpr T ParseNumber(std::string_view str, const std::uint8_t base = 10u)
 {
     T ret{0};
-    bool bNegative = false;
+    [[maybe_unused]] bool bNegative = false;
     bool bParsedFirstDigit = false;
     for (; str.size(); str.remove_prefix(1u))
     {
@@ -23,8 +25,15 @@ template <typename T> constexpr T ParseNumber(std::string_view str)
             switch (c)
             {
             case '-':
-                bNegative = true;
-                continue;
+                if constexpr (std::is_signed_v<std::decay_t<T>>)
+                {
+                    bNegative = true;
+                    continue;
+                }
+                else
+                {
+                    return ret;
+                }
             case '+':
             case ' ':
                 continue;
@@ -33,25 +42,47 @@ template <typename T> constexpr T ParseNumber(std::string_view str)
                 break;
             }
         }
-        if ((c < '0') || (c > '9'))
+        T digit = 0;
+        if ((c >= '0') && (c <= '9'))
+        {
+            digit = c - '0';
+        }
+        else if ((base > 10) && ((c >= 'a') && (c <= 'z')))
+        {
+            digit = c - 'a' + 10;
+        }
+        else if ((base > 10) && ((c >= 'A') && (c <= 'Z')))
+        {
+            digit = c - 'A' + 10;
+        }
+        else
         {
             break;
         }
-        ret *= 10;
-        ret += c - '0';
+        if (digit >= base)
+        {
+            break;
+        }
         bParsedFirstDigit = true;
+        ret *= base;
+        ret += digit;
     }
-    if (bNegative)
+    if constexpr (std::is_signed_v<std::decay_t<T>>)
     {
-        ret *= -1;
+        if (bNegative)
+        {
+            ret *= -1;
+        }
     }
     return ret;
 }
 static_assert(5 == ParseNumber<int>("5"));
 static_assert(50 == ParseNumber<int>(" 50"));
-static_assert(450 == ParseNumber<int>(" +450fdsgs"));
+static_assert(450 == ParseNumber<int>(" +   450fdsgs"));
 static_assert(-21 == ParseNumber<int>("- 21"));
-
+static_assert(-14 == ParseNumber<int>("- 1110", 2));
+static_assert(0xFFFF == ParseNumber<unsigned int>(" +  FFFF", 16));
+static_assert(0xDEADBEEFul == ParseNumber<unsigned int>(" +  DeADbEEF", 16));
 
 } // namespace AOC::Y2021
 
