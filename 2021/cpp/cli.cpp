@@ -29,7 +29,7 @@ int main(const int argc, const char *const argv[])
             std::cerr << "error: please select a day from 1 and 24\n";
             return 0;
         }
-        return dayTmp;
+        return static_cast<std::uint8_t>(dayTmp);
     }();
     if (day == 0)
     {
