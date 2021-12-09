@@ -21,7 +21,7 @@ AOC_Y2021_CONSTEXPR std::vector<uint32_t> ParseInput(std::string_view input)
     std::vector<uint32_t> parsedInput;
     auto inputSize = input.size();
     const auto patternLen = input.find_first_of("\r\n");
-    parsedInput.push_back(patternLen);
+    parsedInput.push_back(static_cast<uint32_t>(patternLen));
     while (inputSize > 4u)
     {
         parsedInput.push_back(ParseNumber<uint32_t>(input, 2));
