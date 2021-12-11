@@ -3,6 +3,7 @@
 
 #include "../inc/types.hpp"
 
+#include <array>
 #include <cstdint>
 #include <string_view>
 #include <type_traits>
@@ -83,6 +84,13 @@ static_assert(-21 == ParseNumber<int>("- 21"));
 static_assert(-14 == ParseNumber<int>("- 1110", 2));
 static_assert(0xFFFF == ParseNumber<unsigned int>(" +  FFFF", 16));
 static_assert(0xDEADBEEFul == ParseNumber<unsigned int>(" +  DeADbEEF", 16));
+
+template <typename T, std::size_t N> consteval auto Vector2Array(const std::vector<T> &vec)
+{
+    std::array<T, N> ret{};
+    std::copy(vec.begin(), vec.end(), ret.begin());
+    return ret;
+}
 
 } // namespace AOC::Y2021
 

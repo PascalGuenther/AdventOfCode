@@ -5,6 +5,7 @@ add_library(AOC_Y2021 STATIC
     src/day02.cpp
     src/day03.cpp
     src/day04.cpp
+    src/day05.cpp
     src/puzzle_factory.cpp
     src/utils.cpp
 )
