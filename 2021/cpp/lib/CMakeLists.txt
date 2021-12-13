@@ -8,6 +8,7 @@ add_library(AOC_Y2021 STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/day05.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/day06.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/day07.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/day08.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/puzzle_factory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
 )
