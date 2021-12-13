@@ -4,6 +4,7 @@
 #include "../inc/types.hpp"
 
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <string_view>
 #include <type_traits>
@@ -84,6 +85,21 @@ static_assert(-21 == ParseNumber<int>("- 21"));
 static_assert(-14 == ParseNumber<int>("- 1110", 2));
 static_assert(0xFFFF == ParseNumber<unsigned int>(" +  FFFF", 16));
 static_assert(0xDEADBEEFul == ParseNumber<unsigned int>(" +  DeADbEEF", 16));
+
+template <typename T> AOC_Y2021_CONSTEXPR std::vector<T> ParseCSV2Vector(std::string_view csv)
+{
+    std::vector<T> ret{};
+    for (std::size_t start = 0; csv.size(); csv.remove_prefix(start + 1))
+    {
+        ret.push_back(ParseNumber<T>(csv));
+        start = csv.find_first_of(',');
+        if (start == csv.npos)
+        {
+            break;
+        }
+    }
+    return ret;
+}
 
 template <typename T, std::size_t N> consteval auto Vector2Array(const std::vector<T> &vec)
 {

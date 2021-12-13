@@ -25,7 +25,7 @@ endfunction()
 add_subdirectory(lib)
 
 add_executable(AOC_Y2021_CLI
-    cli.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/cli.cpp
 )
 
 target_link_libraries(AOC_Y2021_CLI PRIVATE
