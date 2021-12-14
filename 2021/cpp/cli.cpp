@@ -7,7 +7,7 @@
 #include <streambuf>
 #include <string>
 
-// #define AOC_Y2021_DEBUG_DAY (8)
+// #define AOC_Y2021_DEBUG_DAY (9)
 
 #if !defined(AOC_Y2021_DEBUG_DAY)
 int main(const int argc, const char *const argv[])
@@ -94,15 +94,13 @@ int main()
 int main()
 {
     constexpr auto day = AOC_Y2021_DEBUG_DAY;
-    constexpr auto exampleInput =
-        "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe\nedbfga begcd cbg gc "
-        "gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc\nfgaebd cg bdaec gdafb agbcfd gdcbef bgcad "
-        "gfac gcb cdgabef | cg cg fdcagb cbg\nfbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd "
-        "cedba gadfec cb\naecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea\nfgeab "
-        "ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb\ndbcfg fgd bdegcaf fgec aegbdf "
-        "ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe\nbdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg "
-        "gebcd | ed bcgafe cdgba cbgef\negadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg "
-        "cgb\ngcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce";
+    constexpr auto exampleInput = "2199943210\n3987894921\n9856789892\n8767896789\n9899965678" auto pPuzzle =
+        AOC::Y2021::PuzzleFactory::CreatePuzzle(day, exampleInput);
+#elif AOC_Y2021_DEBUG_DAY == 9
+int main()
+{
+    constexpr auto day = AOC_Y2021_DEBUG_DAY;
+    constexpr auto exampleInput = "2199943210\n3987894921\n9856789892\n8767896789\n9899965678";
     auto pPuzzle = AOC::Y2021::PuzzleFactory::CreatePuzzle(day, exampleInput);
 #else
 #error "please specify debug target"

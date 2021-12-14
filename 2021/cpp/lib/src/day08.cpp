@@ -22,6 +22,7 @@ namespace Day08
 
 namespace
 {
+
 using SegmentRepresentation = std::uint8_t;
 
 using DisplayPatternAndValue = std::pair<std::array<SegmentRepresentation, 10U>, std::array<SegmentRepresentation, 4U>>;
@@ -297,7 +298,7 @@ namespace
     static_assert(aMapping[9] == ParseSegmentRepresentation("cefabd"), "Day 8 part 2: cannot map digit");
 
     static_assert(AccumulateRestoredDisplayValues(ParseInput(longExample)) == 61229,
-                  "Day 8 part : error calculating result");
+                  "Day 8 part 2: error calculating result");
 }
 } // namespace
 #endif // AOC_Y2021_CONSTEXPR_UNIT_TEST

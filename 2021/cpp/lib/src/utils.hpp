@@ -108,6 +108,61 @@ template <typename T, std::size_t N> consteval auto Vector2Array(const std::vect
     return ret;
 }
 
+template <typename T> class Vector2D
+{
+  public:
+    AOC_Y2021_CONSTEXPR Vector2D(std::size_t width, std::vector<T> &&vec) : m_width(width), m_vec(vec)
+    {
+    }
+
+    AOC_Y2021_CONSTEXPR inline T &operator()(std::size_t col, std::size_t row)
+    {
+        return m_vec[m_width * row + col];
+    }
+
+    AOC_Y2021_CONSTEXPR inline T operator()(std::size_t col, std::size_t row) const
+    {
+        return m_vec[m_width * row + col];
+    }
+
+    AOC_Y2021_CONSTEXPR inline auto width() const
+    {
+        return m_width;
+    }
+
+    AOC_Y2021_CONSTEXPR inline auto height() const
+    {
+        const auto w = width();
+        const auto s = size();
+        const std::size_t h = (w != 0) ? (s / w) : ((s == 0) ? 0 : 1);
+        return h;
+    }
+
+    AOC_Y2021_CONSTEXPR inline auto size() const
+    {
+        return m_vec.size();
+    }
+
+    AOC_Y2021_CONSTEXPR inline auto empty() const
+    {
+        return m_vec.empty();
+    }
+
+    AOC_Y2021_CONSTEXPR inline auto begin() const
+    {
+        return m_vec.begin();
+    }
+
+    AOC_Y2021_CONSTEXPR inline auto end() const
+    {
+        return m_vec.end();
+    }
+
+  private:
+    std::size_t m_width;
+    std::vector<T> m_vec;
+};
+
 } // namespace AOC::Y2021
 
 #endif // !defined(AOC_Y2021_UTILS_HPP)
