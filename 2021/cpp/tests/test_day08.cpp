@@ -48,8 +48,8 @@ TEST_P(Day08Test, Part2)
 constexpr Day08TestParams day08ExamplesInOut[] = {
     {
         .input{"acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"},
-        .expectedResultPart1{0},
-        .expectedResultPart2{5353},
+        .expectedResultPart1 = 0,
+        .expectedResultPart2 = 5353,
     },
     {
         .input{
@@ -66,8 +66,8 @@ constexpr Day08TestParams day08ExamplesInOut[] = {
             "gebcd | ed bcgafe cdgba cbgef\negadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc "
             "cg "
             "cgb\ngcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce"},
-        .expectedResultPart1{26},
-        .expectedResultPart2{61229},
+        .expectedResultPart1 = 26,
+        .expectedResultPart2 = 61229,
     },
 };
 INSTANTIATE_TEST_SUITE_P(Day08Examples, Day08Test, testing::ValuesIn(day08ExamplesInOut));
