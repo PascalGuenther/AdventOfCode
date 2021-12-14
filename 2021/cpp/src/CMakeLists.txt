@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.16)
+
+set(AOC_Y2021_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
+set(AOC_Y2021_DAYS_LIST "01;02;03;04;05;06;07;08;09")
+
+
+target_sources(AOC_Y2021  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/puzzle_factory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
+)
+
+foreach(DAY ${AOC_Y2021_DAYS_LIST})
+    target_sources(AOC_Y2021 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/day${DAY}.cpp
+    )
+endforeach()

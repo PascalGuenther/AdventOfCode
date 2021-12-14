@@ -1,7 +1,7 @@
 #if !defined(AOC_Y2021_UTILS_HPP)
 #define AOC_Y2021_UTILS_HPP (1)
 
-#include "../inc/types.hpp"
+#include "../include/types.hpp"
 
 #include <array>
 #include <cstddef>
