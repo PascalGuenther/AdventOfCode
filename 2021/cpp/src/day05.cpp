@@ -134,10 +134,15 @@ class OceanFloor final
     {
         const auto gridDimensions = GetGridDimensions(lines);
         std::vector<uint8_t> grid(gridDimensions.first * gridDimensions.second);
-        for (const auto &line : lines | std::ranges::views::filter([&bOnlyHorizontalOrVerticalLines](const auto &l) {
-                                    return (!bOnlyHorizontalOrVerticalLines || l.IsHorizontal() || l.IsVertical());
-                                }))
+        for (const auto &line : lines)
         {
+            if (bOnlyHorizontalOrVerticalLines)
+            {
+                if (!line.IsVertical() && !line.IsHorizontal())
+                {
+                    continue;
+                }
+            }
             const auto fnFlattenCoordinate = [gridDimensions](const Line::Coordinate &co) -> std::size_t {
                 return std::size_t{(gridDimensions.first * co.second) + co.first};
             };
