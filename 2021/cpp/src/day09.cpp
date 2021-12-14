@@ -29,31 +29,31 @@ AOC_Y2021_CONSTEXPR HeightMap ParseInput(std::string_view input)
 {
     std::vector<std::uint8_t> map;
     map.reserve(input.size());
-    std::size_t witdh{0};
+    std::size_t width{0};
     while (input.size() > 1)
     {
         const auto endOfLine = input.find('\n');
         const auto line = (endOfLine == input.npos) ? input : input.substr(0, endOfLine);
-        std::size_t linewitdh{0};
+        std::size_t lineWidth{0};
         for (auto &&c : line)
         {
             if ((c < '0') || (c > '9'))
             {
                 break;
             }
-            ++linewitdh;
+            ++lineWidth;
             map.emplace_back(c - '0');
         }
-        if (witdh == 0)
+        if (width == 0)
         {
-            witdh = linewitdh;
+            width = lineWidth;
         }
-        else if (witdh != linewitdh)
+        else if (width != lineWidth)
         {
             return {0, std::vector<std::uint8_t>()};
         }
 
-        if (endOfLine == input.npos)
+        if ((endOfLine == input.npos) || (lineWidth == 0))
         {
             break;
         }
@@ -62,13 +62,13 @@ AOC_Y2021_CONSTEXPR HeightMap ParseInput(std::string_view input)
             input.remove_prefix(endOfLine + 1);
         }
     }
-    if ((map.size() % witdh) != 0)
+    if ((width == 0) || ((map.size() % width) != 0))
     {
         return {0, std::vector<std::uint8_t>()};
     }
     else
     {
-        return {witdh, std::move(map)};
+        return {width, std::move(map)};
     }
 }
 
