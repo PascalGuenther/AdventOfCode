@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(AdventOfCode VERSION 2021.12.10)
+project(AdventOfCode VERSION 2021.12.11)
 
 if(MSVC)
     set(CMAKE_CXX_STANDARD 23)
