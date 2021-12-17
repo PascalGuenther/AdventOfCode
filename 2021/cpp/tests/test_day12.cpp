@@ -37,14 +37,12 @@ class Day12Test : public testing::TestWithParam<Day12TestParams>
 
 TEST_P(Day12Test, Part1)
 {
-    ASSERT_EQ(pPuzzle->Part1(), GetParam().expectedResultPart1);
+    ASSERT_EQ(std::get<std::int64_t>(pPuzzle->Part1()), GetParam().expectedResultPart1);
 }
 
 TEST_P(Day12Test, Part2)
 {
-    const auto res = pPuzzle->Part2();
-    ASSERT_TRUE(res.has_value());
-    ASSERT_EQ(res.value(), GetParam().expectedResultPart2);
+    ASSERT_EQ(std::get<std::int64_t>(pPuzzle->Part2()), GetParam().expectedResultPart2);
 }
 
 constexpr Day12TestParams day12ExamplesInOut[] = {

@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -274,29 +273,41 @@ PuzzleDay09::PuzzleDay09(const std::string_view input) : pImpl(std::make_unique<
 }
 PuzzleDay09::~PuzzleDay09() = default;
 
-std::optional<std::int64_t> PuzzleDay09::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay09::Part1()
 {
+    IPuzzle::Solution_t ret = std::monostate{};
     if (!pImpl || pImpl->parsedInput.empty())
     {
-        return std::nullopt;
+        return ret;
     }
     pImpl->lowPointMap = Day09::FindLowPoints(pImpl->parsedInput);
     const auto result = Day09::AccumulatedRiskLevelOfLowPoints(pImpl->parsedInput, pImpl->lowPointMap);
-    return (result < 0) ? std::nullopt : std::optional{result};
+    if (result >= 0)
+    {
+        ret = result;
+    }
+    return result;
 }
 
-std::optional<std::int64_t> PuzzleDay09::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay09::Part2()
 {
+    IPuzzle::Solution_t ret = std::monostate{};
     if (!pImpl || pImpl->parsedInput.empty())
     {
-        return std::nullopt;
+        return ret;
     }
     if (pImpl->lowPointMap.empty())
     {
         pImpl->lowPointMap = Day09::FindLowPoints(pImpl->parsedInput);
     }
+    pImpl->lowPointMap = Day09::FindLowPoints(pImpl->parsedInput);
     const auto result = Day09::MultiplyBasinAreas<3>(pImpl->parsedInput, pImpl->lowPointMap);
-    return (result < 0) ? std::nullopt : std::optional{result};
+    if (result >= 0)
+    {
+        ret = result;
+    }
+    return ret;
+
 }
 
 } // namespace AOC::Y2021

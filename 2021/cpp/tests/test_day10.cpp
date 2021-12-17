@@ -33,12 +33,12 @@ class Day10Test : public ::testing::Test
 
 TEST_F(Day10Test, Part1)
 {
-    ASSERT_EQ(pPuzzle->Part1(), 26'397);
+    ASSERT_EQ(std::get<std::int64_t>(pPuzzle->Part1()), 26'397);
 }
 
 TEST_F(Day10Test, Part2)
 {
-    ASSERT_EQ(pPuzzle->Part2(), 288'957);
+    ASSERT_EQ(std::get<std::int64_t>(pPuzzle->Part2()), 288'957);
 }
 
 } // namespace

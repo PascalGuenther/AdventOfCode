@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <string_view>
 #include <utility>
 
@@ -180,16 +179,16 @@ PuzzleDay10::PuzzleDay10(const std::string_view input) : pImpl(std::make_unique<
 }
 PuzzleDay10::~PuzzleDay10() = default;
 
-std::optional<std::int64_t> PuzzleDay10::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay10::Part1()
 {
     if (!pImpl || pImpl->input.empty())
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = Day10::CalculateScore(pImpl->input, false);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     else
     {
@@ -197,16 +196,16 @@ std::optional<std::int64_t> PuzzleDay10::Part1()
     }
 }
 
-std::optional<std::int64_t> PuzzleDay10::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay10::Part2()
 {
     if (!pImpl || pImpl->input.empty())
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = Day10::CalculateScore(pImpl->input, true);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     else
     {

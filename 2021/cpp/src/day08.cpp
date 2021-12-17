@@ -9,7 +9,6 @@
 #include <cstdint>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -326,24 +325,34 @@ PuzzleDay08::PuzzleDay08(const std::string_view input) : pImpl(std::make_unique<
 }
 PuzzleDay08::~PuzzleDay08() = default;
 
-std::optional<std::int64_t> PuzzleDay08::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay08::Part1()
 {
+    IPuzzle::Solution_t ret = std::monostate{};
     if (!pImpl || pImpl->displays.empty())
     {
-        return std::nullopt;
+        return ret;
     }
     const auto result = Day08::CountEasilyTdentifiableDigits(pImpl->displays);
-    return (result < 0) ? std::nullopt : std::optional{result};
+    if (result >= 0)
+    {
+        ret = result;
+    }
+    return ret;
 }
 
-std::optional<std::int64_t> PuzzleDay08::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay08::Part2()
 {
+    IPuzzle::Solution_t ret = std::monostate{};
     if (!pImpl || pImpl->displays.empty())
     {
-        return std::nullopt;
+        return ret;
     }
     const auto result = Day08::AccumulateRestoredDisplayValues(pImpl->displays);
-    return (result < 0) ? std::nullopt : std::optional{result};
+    if (result >= 0)
+    {
+        ret = result;
+    }
+    return ret;
 }
 
 } // namespace AOC::Y2021

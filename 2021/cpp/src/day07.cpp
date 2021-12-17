@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -115,20 +114,20 @@ PuzzleDay07::PuzzleDay07(const std::string_view input) : pImpl(std::make_unique<
 }
 PuzzleDay07::~PuzzleDay07() = default;
 
-std::optional<std::int64_t> PuzzleDay07::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay07::Part1()
 {
     if (!pImpl || pImpl->crabPosHistogram.empty())
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return CalculateCheapestFuelOption(pImpl->crabPosHistogram, true);
 }
 
-std::optional<std::int64_t> PuzzleDay07::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay07::Part2()
 {
     if (!pImpl || pImpl->crabPosHistogram.empty())
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return CalculateCheapestFuelOption(pImpl->crabPosHistogram, false);
 }

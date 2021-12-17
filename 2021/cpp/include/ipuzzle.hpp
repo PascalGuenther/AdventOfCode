@@ -4,7 +4,8 @@
 #include "types.hpp"
 
 #include <cstdint>
-#include <optional>
+#include <string>
+#include <variant>
 
 namespace AOC::Y2021
 {
@@ -12,10 +13,13 @@ namespace AOC::Y2021
 class IPuzzle
 {
   public:
+    using Solution_t = std::variant<std::monostate, std::int64_t, std::string>;
+
+  public:
     virtual ~IPuzzle() = default;
 
-    std::optional<std::int64_t> virtual Part1() = 0;
-    std::optional<std::int64_t> virtual Part2() = 0;
+    [[nodiscard]] Solution_t virtual Part1() = 0;
+    [[nodiscard]] Solution_t virtual Part2() = 0;
 
   protected:
     IPuzzle() = default;

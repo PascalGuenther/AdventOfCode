@@ -37,12 +37,12 @@ class Day08Test : public testing::TestWithParam<Day08TestParams>
 
 TEST_P(Day08Test, Part1)
 {
-    ASSERT_EQ(pPuzzle->Part1(), GetParam().expectedResultPart1);
+    ASSERT_EQ(std::get<std::int64_t>(pPuzzle->Part1()), GetParam().expectedResultPart1);
 }
 
 TEST_P(Day08Test, Part2)
 {
-    ASSERT_EQ(pPuzzle->Part2(), GetParam().expectedResultPart2);
+    ASSERT_EQ(std::get<std::int64_t>(pPuzzle->Part2()), GetParam().expectedResultPart2);
 }
 
 constexpr Day08TestParams day08ExamplesInOut[] = {

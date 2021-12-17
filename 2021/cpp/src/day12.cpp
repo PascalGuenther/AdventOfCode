@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <ranges>
 #include <string_view>
 #include <utility>
@@ -231,16 +230,16 @@ PuzzleDay12::PuzzleDay12(const std::string_view input)
 }
 PuzzleDay12::~PuzzleDay12() = default;
 
-std::optional<std::int64_t> PuzzleDay12::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay12::Part1()
 {
     if (!pImpl)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = Day12::CountPaths(pImpl->GetEdges(), false);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     else
     {
@@ -248,16 +247,16 @@ std::optional<std::int64_t> PuzzleDay12::Part1()
     }
 }
 
-std::optional<std::int64_t> PuzzleDay12::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay12::Part2()
 {
     if (!pImpl)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = Day12::CountPaths(pImpl->GetEdges(), true);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     else
     {

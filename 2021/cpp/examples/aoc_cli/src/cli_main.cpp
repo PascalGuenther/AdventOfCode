@@ -6,6 +6,7 @@
 #include <iostream>
 #include <streambuf>
 #include <string>
+#include <variant>
 
 int main(const int argc, const char *const argv[])
 {
@@ -57,27 +58,31 @@ int main(const int argc, const char *const argv[])
         return EXIT_FAILURE;
     }
 
-    const auto resPart1 = pPuzzle->Part1();
-    if (!resPart1.has_value())
+    const auto solvePart = [](const auto &result, bool bPart2) -> bool {
+        const bool emptyResult = std::holds_alternative<std::monostate>(result);
+        if (!emptyResult)
+        {
+            std::cout << "result of part " << (bPart2 ? 2 : 1) << ":\n";
+            if (std::holds_alternative<std::int64_t>(result))
+            {
+                std::cout << std::get<std::int64_t>(result) << '\n';
+                return true;
+            }
+            if (std::holds_alternative<std::string>(result))
+            {
+                std::cout << std::get<std::string>(result) << '\n';
+                return true;
+            }
+        }
+        std::cerr << "sorry! failed to solve part " << (bPart2 ? 2 : 1) << '\n';
+        return false;
+    };
+    if (solvePart(pPuzzle->Part1(), false) && solvePart(pPuzzle->Part2(), true))
     {
-        std::cerr << "sorry! failed to solve part 1\n!";
-        return EXIT_FAILURE;
+        return EXIT_SUCCESS;
     }
     else
     {
-        std::cout << "result of part 1: " << resPart1.value() << '\n';
-    }
-
-    const auto resPart2 = pPuzzle->Part2();
-    if (!resPart2.has_value())
-    {
-        std::cerr << "sorry! failed to solve part 2\n!";
         return EXIT_FAILURE;
     }
-    else
-    {
-        std::cout << "result of part 2: " << resPart2.value() << '\n';
-    }
-
-    return EXIT_SUCCESS;
 }

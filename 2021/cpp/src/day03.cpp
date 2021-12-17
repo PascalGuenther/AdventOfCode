@@ -146,25 +146,25 @@ PuzzleDay03::PuzzleDay03(const std::string_view input) : pImpl(std::make_unique<
 
 PuzzleDay03::~PuzzleDay03() = default;
 
-std::optional<std::int64_t> PuzzleDay03::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay03::Part1()
 {
     if (!pImpl || (pImpl->parsedInput.size() < 2))
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return CalculatePowerConsumption(pImpl->parsedInput);
 }
 
-std::optional<std::int64_t> PuzzleDay03::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay03::Part2()
 {
     if (!pImpl || (pImpl->parsedInput.size() <= 2))
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto lifeSupportRating = CalculateLifeSupportRating(pImpl->parsedInput);
     if (lifeSupportRating < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return lifeSupportRating;
 }

@@ -159,7 +159,6 @@ class BingoGame
         {
             const auto score_ = it->MarkNumber(drawn);
             bool bHasBingo = score_.has_value();
-            // std::optional<int64_t> score_;
             if (bHasBingo)
             {
                 if (!score.has_value())
@@ -229,22 +228,32 @@ PuzzleDay04::PuzzleDay04(const std::string_view input) : pImpl(std::make_unique<
 
 PuzzleDay04::~PuzzleDay04() = default;
 
-std::optional<std::int64_t> PuzzleDay04::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay04::Part1()
 {
     if (!pImpl)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
-    return pImpl->game.PlayPart1();
+    const auto result = pImpl->game.PlayPart1();
+    if (result.has_value())
+    {
+        return result.value();
+    }
+    return std::monostate{};
 }
 
-std::optional<std::int64_t> PuzzleDay04::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay04::Part2()
 {
     if (!pImpl)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
-    return pImpl->game.PlayPart2();
+    const auto result = pImpl->game.PlayPart2();
+    if (result.has_value())
+    {
+        return result.value();
+    }
+    return std::monostate{};
 }
 
 #if AOC_Y2021_CONSTEXPR_UNIT_TEST

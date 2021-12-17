@@ -4,7 +4,6 @@
 
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -113,20 +112,20 @@ PuzzleDay02::PuzzleDay02(const std::string_view input) : pImpl(std::make_unique<
 
 PuzzleDay02::~PuzzleDay02() = default;
 
-std::optional<std::int64_t> PuzzleDay02::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay02::Part1()
 {
     if (!pImpl || (pImpl->GetDataSize() < 2))
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return pImpl->Part01();
 }
 
-std::optional<std::int64_t> PuzzleDay02::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay02::Part2()
 {
     if (!pImpl || (pImpl->GetDataSize() <= 2))
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return pImpl->Part02();
 }

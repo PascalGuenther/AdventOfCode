@@ -6,7 +6,6 @@
 #include <array>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <ranges>
 #include <string_view>
 #include <utility>
@@ -207,30 +206,30 @@ PuzzleDay05::PuzzleDay05(const std::string_view input) : pImpl(std::make_unique<
 
 PuzzleDay05::~PuzzleDay05() = default;
 
-std::optional<std::int64_t> PuzzleDay05::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay05::Part1()
 {
     if (!pImpl || pImpl->floorLines.empty())
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = OceanFloor::CalculateOverlappingPoints(pImpl->floorLines);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return result;
 }
 
-std::optional<std::int64_t> PuzzleDay05::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay05::Part2()
 {
     if (!pImpl || pImpl->floorLines.empty())
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = OceanFloor::CalculateOverlappingPoints(pImpl->floorLines, false);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return result;
 }

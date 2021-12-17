@@ -7,8 +7,8 @@
     {                                                                                                                  \
       public:                                                                                                          \
         PuzzleDay##day(std::string_view input);                                                                        \
-        std::optional<std::int64_t> Part1() override;                                                                  \
-        std::optional<std::int64_t> Part2() override;                                                                  \
+        [[nodiscard]] Solution_t Part1() override;                                                                     \
+        [[nodiscard]] Solution_t Part2() override;                                                                     \
         ~PuzzleDay##day() override;                                                                                    \
                                                                                                                        \
       private:                                                                                                         \

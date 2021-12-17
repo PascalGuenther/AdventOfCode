@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -72,20 +71,20 @@ PuzzleDay01::PuzzleDay01(const std::string_view input)
 
 PuzzleDay01::~PuzzleDay01() = default;
 
-std::optional<std::int64_t> PuzzleDay01::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay01::Part1()
 {
     if (!pImpl || (pImpl->GetDataSize() < 2))
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return pImpl->Part01();
 }
 
-std::optional<std::int64_t> PuzzleDay01::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay01::Part2()
 {
     if (!pImpl || (pImpl->GetDataSize() <= windowSize))
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return pImpl->Part02();
 }

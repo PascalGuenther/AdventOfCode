@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <memory>
 #include <numeric>
-#include <optional>
 #include <ranges>
 #include <string_view>
 #include <utility>
@@ -105,30 +104,30 @@ PuzzleDay06::PuzzleDay06(const std::string_view input) : pImpl(std::make_unique<
 
 PuzzleDay06::~PuzzleDay06() = default;
 
-std::optional<std::int64_t> PuzzleDay06::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay06::Part1()
 {
     if (!pImpl)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = SimulatePopulation<80>(pImpl->fish);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return result;
 }
 
-std::optional<std::int64_t> PuzzleDay06::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay06::Part2()
 {
     if (!pImpl)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     const auto result = SimulatePopulation<256>(pImpl->fish);
     if (result < 0)
     {
-        return std::nullopt;
+        return std::monostate{};
     }
     return result;
 }
