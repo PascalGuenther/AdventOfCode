@@ -14,6 +14,30 @@ namespace AOC::Y2021
 {
 std::vector<int> ParseLineByLineInt(std::string_view str);
 
+constexpr bool ParseLines(std::string_view input, auto &&fnLineCb, const bool exitOnEmptyLine = true)
+{
+    while (!input.empty())
+    {
+        const auto rfOrLn = input.find_first_of("\r\n");
+        const auto line = (rfOrLn == input.npos) ? input.substr(0) : input.substr(0, rfOrLn);
+        if (exitOnEmptyLine && line.empty())
+        {
+            return false;
+        }
+        if (!fnLineCb(line))
+        {
+            return false;
+        }
+        const auto lf = input.find('\n');
+        if (lf == input.npos)
+        {
+            return true;
+        }
+        input.remove_prefix(lf + 1u);
+    }
+    return true;
+}
+
 template <typename T> constexpr T ParseNumber(std::string_view str, const std::uint8_t base = 10u)
 {
     T ret{0};
