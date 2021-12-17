@@ -213,11 +213,20 @@ AOC_Y2021_PUZZLE_CLASS_DECLARATION(12)
 class PuzzleDay12Impl final
 {
   public:
+    PuzzleDay12Impl(const std::string_view &input) : graph(Day12::ParseInput(input))
+    {
+    }
+    const auto &GetEdges() const
+    {
+        return graph.edges;
+    }
+
+  private:
     Day12::Graph graph;
 };
 
 PuzzleDay12::PuzzleDay12(const std::string_view input)
-    : pImpl(std::make_unique<PuzzleDay12Impl>(Day12::ParseInput(input)))
+    : pImpl(std::make_unique<PuzzleDay12Impl>(input))
 {
 }
 PuzzleDay12::~PuzzleDay12() = default;
@@ -228,7 +237,7 @@ std::optional<std::int64_t> PuzzleDay12::Part1()
     {
         return std::nullopt;
     }
-    const auto result = Day12::CountPaths(pImpl->graph.edges, false);
+    const auto result = Day12::CountPaths(pImpl->GetEdges(), false);
     if (result < 0)
     {
         return std::nullopt;
@@ -245,7 +254,7 @@ std::optional<std::int64_t> PuzzleDay12::Part2()
     {
         return std::nullopt;
     }
-    const auto result = Day12::CountPaths(pImpl->graph.edges, true);
+    const auto result = Day12::CountPaths(pImpl->GetEdges(), true);
     if (result < 0)
     {
         return std::nullopt;
