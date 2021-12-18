@@ -60,7 +60,7 @@ struct TransparentPaper
     Instructions_t instructions;
 };
 
-TransparentPaper ParseInput(const std::string_view &input)
+[[nodiscard]] TransparentPaper ParseInput(const std::string_view &input)
 {
     TransparentPaper parsedPaper;
     bool foundBeginOfInstructionBlock = false;
@@ -157,7 +157,7 @@ AOC_Y2021_CONSTEXPR bool Fold(auto &dotsOnPaper, const auto &instructions,
     return true;
 }
 
-AOC_Y2021_CONSTEXPR std::int64_t CountDotsAfterOneInstruction(const auto &dotsAndInstructions)
+[[nodiscard]] AOC_Y2021_CONSTEXPR std::int64_t CountDotsAfterOneInstruction(const auto &dotsAndInstructions)
 {
     DotMap mutableDotmap = dotsAndInstructions.dots;
     const std::size_t foldingIterations = 1u;
@@ -168,7 +168,7 @@ AOC_Y2021_CONSTEXPR std::int64_t CountDotsAfterOneInstruction(const auto &dotsAn
     return mutableDotmap.CountDots();
 }
 
-AOC_Y2021_CONSTEXPR std::string RestoreCodeByFolding(const auto &dotsAndInstructions)
+[[nodiscard]] AOC_Y2021_CONSTEXPR std::string RestoreCodeByFolding(const auto &dotsAndInstructions)
 {
     DotMap mutableDotmap = dotsAndInstructions.dots;
     if (!Fold(mutableDotmap, dotsAndInstructions.instructions))
@@ -231,7 +231,7 @@ PuzzleDay13::PuzzleDay13(const std::string_view input) : pImpl(std::make_unique<
 }
 PuzzleDay13::~PuzzleDay13() = default;
 
-IPuzzle::Solution_t PuzzleDay13::Part1()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay13::Part1()
 {
     if (!pImpl)
     {
@@ -248,7 +248,7 @@ IPuzzle::Solution_t PuzzleDay13::Part1()
     }
 }
 
-IPuzzle::Solution_t PuzzleDay13::Part2()
+[[nodiscard]] IPuzzle::Solution_t PuzzleDay13::Part2()
 {
     if (!pImpl)
     {
