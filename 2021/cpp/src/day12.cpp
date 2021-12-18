@@ -21,7 +21,7 @@ namespace Day12
 struct Graph
 {
     std::unique_ptr<char[]> str;
-    std::vector<std::pair<std::string, std::string>> edges;
+    std::vector<std::pair<std::string_view, std::string_view>> edges;
 };
 
 Graph ParseInput(const std::string_view &input)
@@ -56,7 +56,7 @@ Graph ParseInput(const std::string_view &input)
             return false;
         }
         parsed.edges.push_back(
-            std::make_pair(std::string{line.substr(0, delimiterPos)}, std::string{line.substr(delimiterPos + 1)}));
+            std::make_pair(std::string_view{line.substr(0, delimiterPos)}, std::string_view{line.substr(delimiterPos + 1)}));
         return true;
     };
     if (!ParseLines(copiedInput, forEachLine))
