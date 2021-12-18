@@ -18,6 +18,9 @@ namespace AOC::Y2021
 namespace Day12
 {
 
+namespace
+{
+
 struct Graph
 {
     std::unique_ptr<char[]> str;
@@ -140,9 +143,6 @@ AOC_Y2021_CONSTEXPR std::int64_t CountPaths(const auto &edges, bool aSingleSmall
     };
     return countPaths(path, countPaths);
 }
-
-namespace
-{
 
 #if AOC_Y2021_CONSTEXPR_UNIT_TEST
 namespace
