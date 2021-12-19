@@ -190,7 +190,6 @@ namespace
     constexpr auto parsedLowPoints =
         Vector2Array<std::pair<std::size_t, std::size_t>, FindLowPoints(ParseToVector2D(exampleInput)).size()>(
             FindLowPoints(ParseToVector2D(exampleInput)));
-    return parsedLowPoints;
     static_assert(expectedLowPoints.size() == parsedLowPoints.size(), "Day 9 part 1: incorrect number of low points");
     static_assert(std::equal(parsedLowPoints.begin(), parsedLowPoints.end(), expectedLowPoints.begin()),
                   "Day 9 part 1: error identifying low points");
