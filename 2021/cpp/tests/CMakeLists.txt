@@ -20,7 +20,6 @@ function(AOC_Y2021_CreateTest TEST_DAY)
     add_executable(${AOC_Y2021_TEST_TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/test_day${TEST_DAY}.cpp
         ${AOC_Y2021_SOURCE_DIR}/day${TEST_DAY}.cpp
-        ${AOC_Y2021_SOURCE_DIR}/utils.cpp
     )
 
     get_target_property(AOC_Y2021_INCLUDES AOC_Y2021 INCLUDE_DIRECTORIES)

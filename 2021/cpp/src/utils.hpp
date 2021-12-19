@@ -12,7 +12,6 @@
 
 namespace AOC::Y2021
 {
-std::vector<int> ParseLineByLineInt(std::string_view str);
 
 constexpr bool ParseLines(std::string_view input, auto &&fnLineCb, const bool exitOnEmptyLine = true)
 {
@@ -51,15 +50,12 @@ template <typename T> constexpr T ParseNumber(std::string_view str, const std::u
             switch (c)
             {
             case '-':
-                if constexpr (std::is_signed_v<std::decay_t<T>>)
-                {
-                    bNegative = true;
-                    continue;
-                }
-                else
+                if constexpr (std::is_unsigned_v<std::decay_t<T>>)
                 {
                     return ret;
                 }
+                bNegative = true;
+                continue;
             case '+':
             case ' ':
                 continue;
@@ -110,14 +106,14 @@ static_assert(-14 == ParseNumber<int>("- 1110", 2));
 static_assert(0xFFFF == ParseNumber<unsigned int>(" +  FFFF", 16));
 static_assert(0xDEADBEEFul == ParseNumber<unsigned int>(" +  DeADbEEF", 16));
 
-template <typename T> AOC_Y2021_CONSTEXPR std::vector<T> ParseCSV2Vector(std::string_view csv)
+template <typename T, char DELIMITER> AOC_Y2021_CONSTEXPR std::vector<T> ParseToVectorOfNums(std::string_view str)
 {
     std::vector<T> ret{};
-    for (std::size_t start = 0; csv.size(); csv.remove_prefix(start + 1))
+    for (std::size_t start = 0; str.size(); str.remove_prefix(start + 1))
     {
-        ret.push_back(ParseNumber<T>(csv));
-        start = csv.find_first_of(',');
-        if (start == csv.npos)
+        ret.push_back(ParseNumber<T>(str));
+        start = str.find_first_of(DELIMITER);
+        if (start == str.npos)
         {
             break;
         }
@@ -135,26 +131,26 @@ template <typename T, std::size_t N> consteval auto Vector2Array(const std::vect
 template <typename T> class Vector2D
 {
   public:
-    AOC_Y2021_CONSTEXPR Vector2D(std::size_t width, std::vector<T> &&vec) : m_width(width), m_vec(vec)
+    [[nodiscard]] AOC_Y2021_CONSTEXPR Vector2D(std::size_t width, std::vector<T> &&vec) : m_width(width), m_vec(vec)
     {
     }
 
-    AOC_Y2021_CONSTEXPR inline T &operator()(std::size_t col, std::size_t row)
-    {
-        return m_vec[m_width * row + col];
-    }
-
-    AOC_Y2021_CONSTEXPR inline T operator()(std::size_t col, std::size_t row) const
+    [[nodiscard]] AOC_Y2021_CONSTEXPR T &operator()(std::size_t col, std::size_t row)
     {
         return m_vec[m_width * row + col];
     }
 
-    AOC_Y2021_CONSTEXPR inline auto width() const
+    [[nodiscard]] AOC_Y2021_CONSTEXPR T operator()(std::size_t col, std::size_t row) const
+    {
+        return m_vec[m_width * row + col];
+    }
+
+    [[nodiscard]] AOC_Y2021_CONSTEXPR auto width() const
     {
         return m_width;
     }
 
-    AOC_Y2021_CONSTEXPR inline auto height() const
+    [[nodiscard]] AOC_Y2021_CONSTEXPR auto height() const
     {
         const auto w = width();
         const auto s = size();
@@ -162,30 +158,74 @@ template <typename T> class Vector2D
         return h;
     }
 
-    AOC_Y2021_CONSTEXPR inline auto size() const
+    [[nodiscard]] AOC_Y2021_CONSTEXPR auto size() const
     {
         return m_vec.size();
     }
 
-    AOC_Y2021_CONSTEXPR inline auto empty() const
+    [[nodiscard]] AOC_Y2021_CONSTEXPR auto empty() const
     {
         return m_vec.empty();
     }
 
-    AOC_Y2021_CONSTEXPR inline auto begin() const
+    [[nodiscard]] AOC_Y2021_CONSTEXPR auto begin() const
     {
         return m_vec.begin();
     }
 
-    AOC_Y2021_CONSTEXPR inline auto end() const
+    [[nodiscard]] AOC_Y2021_CONSTEXPR auto end() const
     {
         return m_vec.end();
+    }
+
+    [[nodiscard]] AOC_Y2021_CONSTEXPR auto square() const
+    {
+        return ((height() > 0) && (height() == width()));
     }
 
   private:
     std::size_t m_width;
     std::vector<T> m_vec;
 };
+
+[[nodiscard]] AOC_Y2021_CONSTEXPR inline Vector2D<std::uint8_t> ParseToVector2D(std::string_view input,
+                                                                                const bool requireSquare = false)
+{
+    std::vector<std::uint8_t> parsed;
+    parsed.reserve(input.size());
+    std::size_t width{0};
+    auto forEachLine = [&parsed, &width](const std::string_view &line) -> bool {
+        if (width == 0)
+        {
+            width = line.size();
+        }
+        else if (width != line.size())
+        {
+            return false;
+        }
+        for (auto &&c : line)
+        {
+            if ((c < '0') || (c > '9'))
+            {
+                return false;
+            }
+            parsed.emplace_back(c - '0');
+        }
+        return true;
+    };
+    const auto validateShape = [&width, &parsed, &requireSquare] {
+        return ((width > 0) && ((parsed.size() % width) == 0) &&
+                ((!requireSquare) || (parsed.size() != (width * width))));
+    };
+    if (!ParseLines(input, forEachLine) || !validateShape())
+    {
+        return {0, std::vector<std::uint8_t>()};
+    }
+    else
+    {
+        return {width, std::move(parsed)};
+    }
+}
 
 } // namespace AOC::Y2021
 

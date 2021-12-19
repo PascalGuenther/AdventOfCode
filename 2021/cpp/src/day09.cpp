@@ -24,53 +24,6 @@ constexpr std::uint8_t notInBasin{9};
 using HeightMap = Vector2D<std::uint8_t>;
 using LowPointMap = std::vector<std::pair<std::size_t, std::size_t>>;
 
-AOC_Y2021_CONSTEXPR HeightMap ParseInput(std::string_view input)
-{
-    std::vector<std::uint8_t> map;
-    map.reserve(input.size());
-    std::size_t width{0};
-    while (input.size() > 1)
-    {
-        const auto endOfLine = input.find('\n');
-        const auto line = (endOfLine == input.npos) ? input : input.substr(0, endOfLine);
-        std::size_t lineWidth{0};
-        for (auto &&c : line)
-        {
-            if ((c < '0') || (c > '9'))
-            {
-                break;
-            }
-            ++lineWidth;
-            map.emplace_back(c - '0');
-        }
-        if (width == 0)
-        {
-            width = lineWidth;
-        }
-        else if (width != lineWidth)
-        {
-            return {0, std::vector<std::uint8_t>()};
-        }
-
-        if ((endOfLine == input.npos) || (lineWidth == 0))
-        {
-            break;
-        }
-        else
-        {
-            input.remove_prefix(endOfLine + 1);
-        }
-    }
-    if ((width == 0) || ((map.size() % width) != 0))
-    {
-        return {0, std::vector<std::uint8_t>()};
-    }
-    else
-    {
-        return {width, std::move(map)};
-    }
-}
-
 AOC_Y2021_CONSTEXPR bool ValidateInput(const HeightMap &input)
 {
     if ((input.size() < 1) || (input.width() < 1) || (input.height() < 1))
@@ -235,15 +188,15 @@ namespace
     constexpr auto exampleInput = "2199943210\n3987894921\n9856789892\n8767896789\n9899965678";
     constexpr std::array<std::pair<std::size_t, std::size_t>, 4U> expectedLowPoints{{{1, 0}, {9, 0}, {2, 2}, {6, 4}}};
     constexpr auto parsedLowPoints =
-        Vector2Array<std::pair<std::size_t, std::size_t>, FindLowPoints(ParseInput(exampleInput)).size()>(
-            FindLowPoints(ParseInput(exampleInput)));
+        Vector2Array<std::pair<std::size_t, std::size_t>, FindLowPoints(ParseToVector2D(exampleInput)).size()>(
+            FindLowPoints(ParseToVector2D(exampleInput)));
     return parsedLowPoints;
     static_assert(expectedLowPoints.size() == parsedLowPoints.size(), "Day 9 part 1: incorrect number of low points");
     static_assert(std::equal(parsedLowPoints.begin(), parsedLowPoints.end(), expectedLowPoints.begin()),
                   "Day 9 part 1: error identifying low points");
-    static_assert(AccumulatedRiskLevelOfLowPoints(ParseInput(exampleInput), parsedLowPoints) == 15,
+    static_assert(AccumulatedRiskLevelOfLowPoints(ParseToVector2D(exampleInput), parsedLowPoints) == 15,
                   "Day 9 part 1: error calculating result");
-    static_assert(MultiplyBasinAreas<3>(ParseInput(exampleInput), parsedLowPoints) == 1134,
+    static_assert(MultiplyBasinAreas<3>(ParseToVector2D(exampleInput), parsedLowPoints) == 1134,
                   "Day 9 part 2: error calculating result");
 }
 } // namespace
@@ -257,7 +210,7 @@ class PuzzleDay09Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay09Impl(std::string_view input) : parsedInput(Day09::ParseInput(input))
+    AOC_Y2021_CONSTEXPR PuzzleDay09Impl(std::string_view input) : parsedInput(ParseToVector2D(input))
     {
     }
 
@@ -265,6 +218,8 @@ class PuzzleDay09Impl final
     Day09::HeightMap parsedInput;
     Day09::LowPointMap lowPointMap;
 };
+
+#if defined(AOC_Y2021_PUZZLE_CLASS_DECLARATION)
 
 AOC_Y2021_PUZZLE_CLASS_DECLARATION(09)
 
@@ -307,7 +262,8 @@ PuzzleDay09::~PuzzleDay09() = default;
         ret = result;
     }
     return ret;
-
 }
+
+#endif // defined(AOC_Y2021_PUZZLE_CLASS_DECLARATION)
 
 } // namespace AOC::Y2021

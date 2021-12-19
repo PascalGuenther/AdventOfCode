@@ -20,7 +20,7 @@ namespace
 
 AOC_Y2021_CONSTEXPR auto ParseInput(std::string_view input)
 {
-    const auto parsedPositions = ParseCSV2Vector<std::uint32_t>(input);
+    const auto parsedPositions = ParseToVectorOfNums<std::uint32_t, ','>(input);
     const auto maxInput = *std::ranges::max_element(parsedPositions);
     std::vector<std::decay_t<decltype(maxInput)>> posistionHistogram(maxInput + 1);
     for (const auto &position : parsedPositions)

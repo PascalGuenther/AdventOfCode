@@ -65,7 +65,7 @@ class PuzzleDay01Impl final
 AOC_Y2021_PUZZLE_CLASS_DECLARATION(01)
 
 PuzzleDay01::PuzzleDay01(const std::string_view input)
-    : pImpl(std::make_unique<PuzzleDay01Impl>(ParseLineByLineInt(input)))
+    : pImpl(std::make_unique<PuzzleDay01Impl>(ParseToVectorOfNums<int, '\n'>(input)))
 {
 }
 
