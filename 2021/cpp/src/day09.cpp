@@ -240,7 +240,7 @@ PuzzleDay09::~PuzzleDay09() = default;
     {
         ret = result;
     }
-    return result;
+    return ret;
 }
 
 [[nodiscard]] IPuzzle::Solution_t PuzzleDay09::Part2()

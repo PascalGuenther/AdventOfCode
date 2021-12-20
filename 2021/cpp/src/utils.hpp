@@ -145,6 +145,16 @@ template <typename T> class Vector2D
         return m_vec[m_width * row + col];
     }
 
+    [[nodiscard]] AOC_Y2021_CONSTEXPR T &operator[](std::size_t pos)
+    {
+        return m_vec[pos];
+    }
+
+    [[nodiscard]] AOC_Y2021_CONSTEXPR const T &operator[](std::size_t pos) const
+    {
+        return m_vec[pos];
+    }
+
     [[nodiscard]] AOC_Y2021_CONSTEXPR auto width() const
     {
         return m_width;
