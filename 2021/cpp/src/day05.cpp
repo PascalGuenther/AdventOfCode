@@ -148,9 +148,9 @@ class OceanFloor final
             const size_t startCoordFlat{fnFlattenCoordinate(line.startCoord)};
             const size_t endCoordFlat{fnFlattenCoordinate(line.endCoord)};
             const bool bSwap = endCoordFlat < startCoordFlat;
-            const auto itStart = grid.begin() + (bSwap ? endCoordFlat : startCoordFlat);
-            const auto itEnd = grid.begin() + (bSwap ? startCoordFlat : endCoordFlat);
-            if (itEnd >= grid.end())
+            const auto startPos = bSwap ? endCoordFlat : startCoordFlat;
+            const auto endPos = bSwap ? startCoordFlat : endCoordFlat;
+            if ((endPos >= grid.size()) || (endPos < startPos))
             {
                 return -__LINE__;
             }
@@ -171,10 +171,10 @@ class OceanFloor final
                     return bGoDownLeft ? (gridDimensions.first - 1) : (gridDimensions.first + 1);
                 }
             }();
-            // for (auto it = grid.begin(); it <= grid.end(); it += advance)
-            for (auto it = itStart; it <= itEnd; it += advance)
+
+            for (auto i = startPos; i <= endPos; i += advance)
             {
-                *it += 1;
+                grid[i] += 1;
             }
         }
         return std::ranges::count_if(grid, [](const auto &overlappingLines) { return overlappingLines >= 2; });

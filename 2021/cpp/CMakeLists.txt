@@ -18,6 +18,7 @@ function(default_compile_options target)
             -Wall
             -Wpedantic
             -Wextra
+            -Wconversion
             -Werror
         )
     endif()

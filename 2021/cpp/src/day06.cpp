@@ -45,7 +45,7 @@ template <std::size_t maxDays> consteval auto GeneratePopulationLUT()
 {
     constexpr std::uint8_t counterRestart{6u};
     std::array<PopulationHistogram, maxDays + 1u> aCache{};
-    auto fnOffspring = [&counterRestart, &aCache](const std::uint8_t counter, const std::uint64_t days,
+    auto fnOffspring = [&counterRestart, &aCache](const std::size_t counter, const std::uint64_t days,
                                                   auto &&recursion) -> std::int64_t {
         auto &cacheEntry = aCache[days][counter];
         if (cacheEntry < 1)
@@ -69,10 +69,9 @@ template <std::size_t maxDays> consteval auto GeneratePopulationLUT()
         return cacheEntry;
     };
     PopulationHistogram histogramMultiplierLUT{};
-    std::iota(histogramMultiplierLUT.begin(), histogramMultiplierLUT.end(), 0u);
-    for (auto &i : histogramMultiplierLUT)
+    for (std::size_t u = 0U; u != histogramMultiplierLUT.size(); ++u)
     {
-        i = fnOffspring(i, maxDays, fnOffspring);
+        histogramMultiplierLUT[u] = fnOffspring(u, maxDays, fnOffspring);
     }
     return histogramMultiplierLUT;
 }

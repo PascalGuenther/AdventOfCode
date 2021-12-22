@@ -132,7 +132,7 @@ class BingoGame
                     }
                     input.remove_prefix(start);
                     const auto num = ParseNumber<std::uint8_t>(input);
-                    board.aaNums[row][col].num = num;
+                    board.aaNums[row][col].num = (num & 0b0111'1111);
                     const auto end = input.find_first_of(whitespaceChars);
                     if (end == input.npos)
                     {

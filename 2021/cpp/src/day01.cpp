@@ -43,7 +43,7 @@ class PuzzleDay01Impl final
         std::int64_t ret = -1;
         for (auto end = measurements.begin() + windowSize; end <= vecEnd; end++)
         {
-            const int windowSum = std::accumulate(end - windowSize, end, 0u);
+            const int windowSum = std::accumulate(end - windowSize, end, 0);
             if (windowSum > prevWindowSum)
             {
                 ret++;

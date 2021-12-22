@@ -133,7 +133,7 @@ AOC_Y2021_CONSTEXPR bool Fold(auto &dotsOnPaper, const auto &instructions,
                 {
                     return false;
                 }
-                const Coord_t foldedCoordinate = ((2 * line) - oldCoordinate);
+                const Coord_t foldedCoordinate = ((2U * line) - oldCoordinate) & 0xFFFF;
                 if (bFoldLeft)
                 {
                     foldedPaper.Insert({foldedCoordinate, oldDot.second});
@@ -165,7 +165,7 @@ AOC_Y2021_CONSTEXPR bool Fold(auto &dotsOnPaper, const auto &instructions,
     {
         return -__LINE__;
     }
-    return mutableDotmap.CountDots();
+    return static_cast<std::int64_t>(mutableDotmap.CountDots());
 }
 
 [[nodiscard]] AOC_Y2021_CONSTEXPR std::string RestoreCodeByFolding(const auto &dotsAndInstructions)

@@ -67,15 +67,15 @@ template <typename T> constexpr T ParseNumber(std::string_view str, const std::u
         T digit = 0;
         if ((c >= '0') && (c <= '9'))
         {
-            digit = c - '0';
+            digit = static_cast<T>(c - '0');
         }
         else if ((base > 10) && ((c >= 'a') && (c <= 'z')))
         {
-            digit = c - 'a' + 10;
+            digit = static_cast<T>(c - 'a' + 10);
         }
         else if ((base > 10) && ((c >= 'A') && (c <= 'Z')))
         {
-            digit = c - 'A' + 10;
+            digit = static_cast<T>(c - 'A' + 10);
         }
         else
         {

@@ -157,16 +157,16 @@ AOC_Y2021_CONSTEXPR IPuzzle::Solution_t ExpandMapAndSearchLowRiskPath(const Risk
                          std::vector<std::uint8_t>(expansionFactor * expansionFactor * riskMap.size(), 0));
 
     const auto transformValue = [](const auto &source, const std::size_t x, const std::size_t y,
-                                   const std::size_t add) {
+                                   const std::uint8_t add) {
         const std::uint8_t original = source(x, y);
         std::uint8_t updated = original + add;
         if (updated > 9)
         {
-            updated = ((updated - 1) % 9) + 1;
+            updated = static_cast<std::uint8_t>(((updated - 1U) % 9U) + 1U);
         }
         return updated;
     };
-    for (std::size_t expandX = 0U; expandX != expansionFactor; ++expandX)
+    for (std::uint8_t expandX = 0U; expandX != expansionFactor; ++expandX)
     {
         for (size_t x = 0; x != riskMap.width(); x++)
         {
@@ -177,7 +177,7 @@ AOC_Y2021_CONSTEXPR IPuzzle::Solution_t ExpandMapAndSearchLowRiskPath(const Risk
         }
     }
 
-    for (std::size_t expandY = 1U; expandY != expansionFactor; ++expandY)
+    for (std::uint8_t expandY = 1U; expandY != expansionFactor; ++expandY)
     {
         for (size_t x = 0U; x != expandedMap.width(); x++)
         {

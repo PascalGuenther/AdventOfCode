@@ -44,7 +44,7 @@ constexpr SegmentRepresentation ParseSegmentRepresentation(const std::string_vie
         {
             return 0;
         }
-        ret |= 1 << (segment - segMin);
+        ret = (ret | (1U << (segment - segMin))) & 0xFF;
     }
     return ret;
 }

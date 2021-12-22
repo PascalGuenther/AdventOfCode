@@ -48,8 +48,8 @@ AOC_Y2021_CONSTEXPR std::int64_t CalculatePowerConsumption(const std::vector<uin
     uint32_t gamma = 0u;
     for (size_t index = 0; index != patternLen; index++)
     {
-        const auto numOfSetBits =
-            std::count_if(input.begin() + 1u, input.end(), [&index](const auto &i) { return (i & (1u << index)); });
+        const auto numOfSetBits = static_cast<std::size_t>(
+            std::count_if(input.begin() + 1u, input.end(), [&index](const auto &i) { return (i & (1u << index)); }));
         const auto numOfClearedBits = inputCnt - numOfSetBits;
 
         if (static_cast<std::size_t>(numOfSetBits) > numOfClearedBits)
@@ -57,7 +57,7 @@ AOC_Y2021_CONSTEXPR std::int64_t CalculatePowerConsumption(const std::vector<uin
             gamma |= 1u << index;
         }
     }
-    const uint32_t epsilon = (~gamma) & ((1ul << patternLen) - 1ul);
+    const uint32_t epsilon = (~gamma) & ((1u << patternLen) - 1u);
     return gamma * epsilon;
 }
 

@@ -131,13 +131,13 @@ AOC_Y2021_CONSTEXPR std::int64_t CalculateScore(std::string_view input, const bo
     }
     else
     {
-        const auto middle = (scores.size() / 2);
-        if (middle >= scores.size())
+        const auto middle = scores.begin() + (scores.size() / 2);
+        if (middle >= scores.end())
         {
             return -__LINE__;
         }
-        std::nth_element(scores.begin(), scores.begin() + middle, scores.end());
-        return scores[middle];
+        std::nth_element(scores.begin(), middle, scores.end());
+        return (*middle);
     }
 }
 

@@ -114,7 +114,7 @@ AOC_Y2021_CONSTEXPR IPuzzle::Solution_t GrowPolymer(const ParserOutput &input, c
     Frequencies_t frequencies{};
     for (const auto &c : polyTpl)
     {
-        frequencies[c - 'A'] += 1;
+        frequencies[static_cast<unsigned char>(c - 'A')] += 1;
     }
     std::vector<std::optional<Frequencies_t>> recursionCache((steps + 1) * rules.size());
     static_assert(frequencies.size() == 26);
@@ -142,7 +142,7 @@ AOC_Y2021_CONSTEXPR IPuzzle::Solution_t GrowPolymer(const ParserOutput &input, c
                         },
                     };
                     Frequencies_t ourFreq{};
-                    ourFreq[rules[index].to - 'A'] = 1;
+                    ourFreq[static_cast<unsigned char>(rules[index].to - 'A')] = 1;
                     for (const auto &newPair : newPairs)
                     {
                         const auto pairIt = std::ranges::find_if(
@@ -151,7 +151,7 @@ AOC_Y2021_CONSTEXPR IPuzzle::Solution_t GrowPolymer(const ParserOutput &input, c
                         {
                             return false;
                         }
-                        const auto newPairIndex = std::distance(rules.begin(), pairIt);
+                        const auto newPairIndex = static_cast<std::size_t>(std::distance(rules.begin(), pairIt));
 
                         if (!recursion(newPairIndex, ourFreq, remainingSteps - 1, recursion))
                         {
