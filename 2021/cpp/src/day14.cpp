@@ -224,7 +224,7 @@ AOC_Y2021_PUZZLE_CLASS_DECLARATION(14)
 class PuzzleDay14Impl final
 {
   public:
-    PuzzleDay14Impl(const std::string_view &input) : parsed(Day14::ParseInput(input))
+    explicit PuzzleDay14Impl(const std::string_view &input) : parsed(Day14::ParseInput(input))
     {
     }
 

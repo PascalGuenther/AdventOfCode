@@ -6,7 +6,7 @@
     class PuzzleDay##day final : public IPuzzle                                                                        \
     {                                                                                                                  \
       public:                                                                                                          \
-        PuzzleDay##day(std::string_view input);                                                                        \
+        explicit PuzzleDay##day(std::string_view input);                                                               \
         [[nodiscard]] Solution_t Part1() override;                                                                     \
         [[nodiscard]] Solution_t Part2() override;                                                                     \
         ~PuzzleDay##day() override;                                                                                    \

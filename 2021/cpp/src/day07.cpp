@@ -99,7 +99,7 @@ class PuzzleDay07Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay07Impl(std::string_view input) : crabPosHistogram(ParseInput(input))
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay07Impl(std::string_view input) : crabPosHistogram(ParseInput(input))
     {
     }
 

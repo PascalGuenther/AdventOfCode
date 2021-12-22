@@ -212,7 +212,7 @@ AOC_Y2021_PUZZLE_CLASS_DECLARATION(12)
 class PuzzleDay12Impl final
 {
   public:
-    PuzzleDay12Impl(const std::string_view &input) : graph(Day12::ParseInput(input))
+    explicit PuzzleDay12Impl(const std::string_view &input) : graph(Day12::ParseInput(input))
     {
     }
     const auto &GetEdges() const

@@ -13,7 +13,7 @@ namespace AOC::Y2021
 class PuzzleDay02Impl final
 {
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay02Impl(std::string_view writtenInstructions)
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay02Impl(std::string_view writtenInstructions)
     {
         auto inputSize = writtenInstructions.size();
         while (inputSize > 4u)

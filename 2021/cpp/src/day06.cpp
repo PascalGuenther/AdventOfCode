@@ -52,18 +52,15 @@ template <std::size_t maxDays> consteval auto GeneratePopulationLUT()
         {
             switch (days)
             {
-            case 0:
+            break; case 0:
                 cacheEntry = 1;
-                break;
-            case 1:
+            break; case 1:
                 cacheEntry = (counter == 0) ? 2 : 1;
-                break;
-            default:
+            break; default:
                 cacheEntry =
                     (counter == 0)
                         ? (recursion(counterRestart, days - 1, recursion) + recursion(counterMax, days - 1, recursion))
                         : recursion(counter - 1, days - 1, recursion);
-                break;
             }
         }
         return cacheEntry;
@@ -88,7 +85,7 @@ class PuzzleDay06Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay06Impl(std::string_view input) : fish(ParseInput(input))
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay06Impl(std::string_view input) : fish(ParseInput(input))
     {
     }
 

@@ -214,7 +214,7 @@ AOC_Y2021_PUZZLE_CLASS_DECLARATION(13)
 class PuzzleDay13Impl final
 {
   public:
-    PuzzleDay13Impl(const std::string_view &input) : transparentPaper(Day13::ParseInput(input))
+    explicit  PuzzleDay13Impl(const std::string_view &input) : transparentPaper(Day13::ParseInput(input))
     {
     }
     const auto &GetTransParentPaper() const

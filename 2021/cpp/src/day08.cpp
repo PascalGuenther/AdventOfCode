@@ -310,7 +310,7 @@ class PuzzleDay08Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay08Impl(std::string_view input) : displays(Day08::ParseInput(input))
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay08Impl(std::string_view input) : displays(Day08::ParseInput(input))
     {
     }
 

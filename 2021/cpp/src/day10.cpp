@@ -80,21 +80,21 @@ AOC_Y2021_CONSTEXPR std::int64_t CalculateScore(std::string_view input, const bo
             }
             else
             {
-                const auto it =
+                const auto itSymbol =
                     std::find_if(aSymbols.begin(), aSymbols.end(), [&c](const auto &s) { return (s.close == c); });
-                const bool bIsClosingSymbol = (it != aSymbols.end());
+                const bool bIsClosingSymbol = (itSymbol != aSymbols.end());
                 if (!bIsClosingSymbol)
                 {
                     return -__LINE__; // error parsing input
                 }
-                const bool bIsExpectedClosingChar = ((stack.size() > 0) && (stack.back() == it));
+                const bool bIsExpectedClosingChar = ((stack.size() > 0) && (stack.back() == itSymbol));
                 if (bIsExpectedClosingChar)
                 {
                     stack.pop_back();
                 }
                 else
                 {
-                    lineErrorPoints = it->errorPoints;
+                    lineErrorPoints = itSymbol->errorPoints;
                     break;
                 }
             }
@@ -164,7 +164,7 @@ class PuzzleDay10Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay10Impl(const std::string_view &input) : input(input)
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay10Impl(const std::string_view &input) : input(input)
     {
     }
 

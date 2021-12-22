@@ -17,7 +17,7 @@ constexpr std::size_t windowSize = 3u;
 class PuzzleDay01Impl final
 {
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay01Impl(std::vector<int> &&measurements) : measurements(measurements)
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay01Impl(std::vector<int> &&measurements) : measurements(measurements)
     {
     }
 

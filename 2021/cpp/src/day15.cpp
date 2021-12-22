@@ -199,7 +199,7 @@ class PuzzleDay15Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay15Impl(std::string_view input) : riskMap(ParseToVector2D(input))
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay15Impl(std::string_view input) : riskMap(ParseToVector2D(input))
     {
     }
 

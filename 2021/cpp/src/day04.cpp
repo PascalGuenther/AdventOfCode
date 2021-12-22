@@ -70,17 +70,12 @@ class BingoGame
             };
             if (fnIsHorizontalBingo() || fnVerticalRowBingo())
             {
-                std::uint32_t sumOfUnmarkedNums = 0;
-                for (const auto &row : aaNums)
-                {
-                    for (const auto &num : row)
-                    {
-                        if (!num.drawn)
-                        {
-                            sumOfUnmarkedNums += num.num;
-                        }
-                    }
-                }
+                const auto sumOfUnmarkedNums =
+                    std::accumulate(aaNums.begin(), aaNums.end(), 0U, [](const auto acc, const auto &row) {
+                        return acc + std::accumulate(row.begin(), row.end(), 0U, [](const auto acc, const auto &n) {
+                                   return acc + (n.drawn ? 0 : n.num);
+                               });
+                    });
                 const auto score = sumOfUnmarkedNums * number;
                 return score;
             }
@@ -95,7 +90,7 @@ class BingoGame
     };
 
   public:
-    AOC_Y2021_CONSTEXPR BingoGame(std::string_view input)
+    explicit AOC_Y2021_CONSTEXPR BingoGame(std::string_view input)
     {
         const auto endOfFirstLine = input.find_first_of('\n');
         if (endOfFirstLine == input.npos)
@@ -213,7 +208,7 @@ class PuzzleDay04Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay04Impl(std::string_view input) : game(input)
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay04Impl(std::string_view input) : game(input)
     {
     }
 

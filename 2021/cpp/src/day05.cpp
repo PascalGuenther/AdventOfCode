@@ -191,7 +191,7 @@ class PuzzleDay05Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay05Impl(std::string_view input) : floorLines(OceanFloor::ParseInput(input))
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay05Impl(std::string_view input) : floorLines(OceanFloor::ParseInput(input))
     {
     }
 

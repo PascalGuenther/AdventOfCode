@@ -44,7 +44,7 @@ class PuzzleDay11Impl final
         return aaMap;
     }
 
-    AOC_Y2021_CONSTEXPR PuzzleDay11Impl(const std::string_view &input) : octopusMap(ParseInput(input))
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay11Impl(const std::string_view &input) : octopusMap(ParseInput(input))
     {
     }
 
@@ -79,10 +79,8 @@ class PuzzleDay11Impl final
     {
         for (auto &rowOfOctopusses : map)
         {
-            for (auto &octopus : rowOfOctopusses)
-            {
-                octopus++;
-            }
+            std::transform(rowOfOctopusses.begin(), rowOfOctopusses.end(), rowOfOctopusses.begin(),
+                           [](const auto &octopus) { return octopus + 1U; });
         }
 
         constexpr std::uint8_t flashThreshold = 10;
@@ -137,13 +135,8 @@ class PuzzleDay11Impl final
 
         for (auto &rowOfOctopusses : map)
         {
-            for (auto &octopus : rowOfOctopusses)
-            {
-                if (octopus >= flashThreshold)
-                {
-                    octopus = 0;
-                }
-            }
+            std::ranges::replace_if(
+                rowOfOctopusses, [&flashThreshold](const auto &octo) { return octo >= flashThreshold; }, 0U);
         }
         return flashes;
     }

@@ -102,7 +102,6 @@ AOC_Y2021_CONSTEXPR std::int64_t AccumulatedRiskLevelOfLowPoints(const HeightMap
         const auto riskLevel = CalculateRiskLevel(input, col_row);
         return acc + riskLevel;
     });
-    return 0;
 }
 
 template <std::size_t N> AOC_Y2021_CONSTEXPR auto FindLargestBasins(const HeightMap &input, const auto &lowPoints)
@@ -209,7 +208,7 @@ class PuzzleDay09Impl final
 {
 
   public:
-    AOC_Y2021_CONSTEXPR PuzzleDay09Impl(std::string_view input) : parsedInput(ParseToVector2D(input))
+    explicit AOC_Y2021_CONSTEXPR PuzzleDay09Impl(std::string_view input) : parsedInput(ParseToVector2D(input))
     {
     }
 
