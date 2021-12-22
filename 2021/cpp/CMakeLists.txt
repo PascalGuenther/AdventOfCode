@@ -8,6 +8,9 @@ else()
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+#set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+
+
 function(default_compile_options target)
     if(MSVC)
         target_compile_options(${target} PRIVATE
@@ -19,6 +22,8 @@ function(default_compile_options target)
             -Wpedantic
             -Wextra
             -Werror
+            -march=native
+            -Ofast
         )
     endif()
 endfunction()
